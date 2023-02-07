@@ -2,12 +2,101 @@
 #include <vector>
 using namespace std;
 
+
+class agrupacionMusical{
+protected:
+    string nombre;
+    int id;
+public:
+    agrupacionMusical(string nombre, int id  /*aca puede ir hacer una asociacion*/):nombre(nombre),id(id){}
+
+    agrupacionMusical(){
+        this->nombre = "";
+        this->id = 0;
+    }
+
+    const string &getNombre() const {
+        return nombre;
+    }
+
+    void setNombre(const string &nombre) {
+        agrupacionMusical::nombre = nombre;
+    }
+
+    int getId() const {
+        return id;
+    }
+
+    void setId(int id) {
+        agrupacionMusical::id = id;
+    }
+
+    virtual void tocar(){
+        cout<< "sorry, no hay nada";
+    };
+};
+
+class banda:public agrupacionMusical{
+protected:
+    string genero;
+
+public:
+    banda(string nombre, int id, string genero):agrupacionMusical(nombre,id),genero(genero){}
+    banda(){
+        this->nombre="";
+        this->id=0;
+        this->genero="";
+    }
+
+    void tocar()override{
+        cout<< "tumpa tumpa tumpa tumpa";
+    }
+
+    const string &getGenero() const {
+        return genero;
+    }
+
+    void setGenero(const string &genero) {
+        banda::genero = genero;
+    }
+
+};
+
+class orquesta:public agrupacionMusical{
+protected:
+    string TipoOrquesta;
+
+public:
+    orquesta(string nombre, int id, string tipoOrquesta):agrupacionMusical(nombre,id),TipoOrquesta(tipoOrquesta){}
+
+    orquesta(){
+        this->nombre = "";
+        this->id = 0;
+        this->TipoOrquesta = "";
+    }
+
+    const string &getTipoOrquesta() const {
+        return TipoOrquesta;
+    }
+
+    void setTipoOrquesta(const string &tipoOrquesta) {
+        TipoOrquesta = tipoOrquesta;
+    }
+
+    void tocar() override{
+        cout<<"el director de orquesta esta iniciando la obra";
+    }
+
+
+};
+
+
 // Definimos las interfaces
 class Musica
 {
 public:
     virtual bool Tocar() = 0;
-};
+};//yo quitaria musica
 
 class ArtistaNacional
 {
@@ -935,6 +1024,34 @@ public:
         return output;
     }
 };
+
+/*class seguridad{
+public:
+    virtual string usoDeArmas()=0;
+};
+class vigilante:public seguridad, Persona{
+protected:
+    //cualquier atributo no se que poner la vd xd
+public:
+    vigilante(string nombre, int id, int edad):persona(nombre,id, edad);
+    string usoDeArmas() override{
+        string usoDeArmas = "bolillo";
+        cout<< usoDeArmas;
+        return usoDeArmas;
+    }
+};
+class policia:public Persona,seguridad{
+protected:
+    string Rango;
+public:
+    string usoDeArmas() override{
+        string usoDeArma = "Pistola y revolver";
+        cout<<usoDeArma;
+        return usoDeArma;
+    }
+    policia(string nombre, int id, int edad, string Rango):Persona(id,nombre,edad),Rango(Rango){};
+};*/
+
 class FuerzaPolicial : public Persona, public Movilizacion
 {
 protected:
@@ -1132,4 +1249,7 @@ int main()
 
     Logistica a(12, "juan", 45, 452, "dddd", "ddfgfdf", "ffvffvv");
     cout << a;
+
+    agrupacionMusical *a1 = new banda("angelito69",1010,"xd??");
+    a1->tocar();
 }
