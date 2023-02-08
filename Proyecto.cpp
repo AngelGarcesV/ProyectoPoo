@@ -3,16 +3,18 @@
 using namespace std;
 
 
-class agrupacionMusical{
+class  agrupacionMusical{
 protected:
     string nombre;
     int id;
+    int cantidadDeIntegrantes;
 public:
-    agrupacionMusical(string nombre, int id  /*aca puede ir hacer una asociacion*/):nombre(nombre),id(id){}
+    agrupacionMusical(string nombre, int id, int cantidadDeIntegrantes  /*aca puede ir hacer una asociacion*/):nombre(nombre),id(id),cantidadDeIntegrantes(cantidadDeIntegrantes){}
 
     agrupacionMusical(){
         this->nombre = "";
         this->id = 0;
+        this->cantidadDeIntegrantes = 0;
     }
 
     const string &getNombre() const {
@@ -31,25 +33,48 @@ public:
         agrupacionMusical::id = id;
     }
 
+    int getCantidadDeIntegrantes() const {
+        return cantidadDeIntegrantes;
+    }
+
+    void setCantidadDeIntegrantes(int cantidadDeIntegrantes) {
+        agrupacionMusical::cantidadDeIntegrantes = cantidadDeIntegrantes;
+    }
+
     virtual void tocar(){
-        cout<< "sorry, no hay nada";
-    };
+        cout<< "Upss, no sabemos donde esta la agrupacion!!"<<endl;
+    }
+    void print(){
+        cout<< "Nombre: "<<nombre<<endl;
+        cout<< "Id: "<<id<<endl;
+        cout<< "Cantidad de integrantes: "<<cantidadDeIntegrantes<<endl;
+    }
+
+    friend ostream &operator<<(ostream &output, agrupacionMusical &m1){
+        output<<"Nombre: "<<m1.nombre<<endl;
+        output<<"Id: "<< m1.id<<endl;
+        output<<"Cantidad de integranges: "<<m1.cantidadDeIntegrantes<<endl;
+        return output;
+    }
+
+
 };
 
 class banda:public agrupacionMusical{
 protected:
     string genero;
-
+    
 public:
-    banda(string nombre, int id, string genero):agrupacionMusical(nombre,id),genero(genero){}
+    banda(string nombre, int id, int cantidadDeIntegrantes,string genero):agrupacionMusical(nombre,id,cantidadDeIntegrantes),genero(genero){}
     banda(){
         this->nombre="";
         this->id=0;
+        this->cantidadDeIntegrantes = 0;
         this->genero="";
     }
 
     void tocar()override{
-        cout<< "tumpa tumpa tumpa tumpa";
+        cout<< "tumpa tumpa tumpa tumpa"<<endl;
     }
 
     const string &getGenero() const {
@@ -59,7 +84,15 @@ public:
     void setGenero(const string &genero) {
         banda::genero = genero;
     }
-
+    
+    void print(){
+        agrupacionMusical::print();
+        cout<< "Genero: "<<genero<<endl;
+    }
+    friend ostream &operator<<(ostream &output, banda &b1){
+        b1.agrupacionMusical::print();
+        output<<"Genero: "<<b1.genero<<endl;
+    }
 };
 
 class orquesta:public agrupacionMusical{
@@ -67,11 +100,12 @@ protected:
     string TipoOrquesta;
 
 public:
-    orquesta(string nombre, int id, string tipoOrquesta):agrupacionMusical(nombre,id),TipoOrquesta(tipoOrquesta){}
+    orquesta(string nombre, int id, int cantidadDeIntegrantes, string tipoOrquesta):agrupacionMusical(nombre,id,cantidadDeIntegrantes),TipoOrquesta(tipoOrquesta){}
 
     orquesta(){
         this->nombre = "";
         this->id = 0;
+        this->cantidadDeIntegrantes = 0;
         this->TipoOrquesta = "";
     }
 
@@ -84,8 +118,18 @@ public:
     }
 
     void tocar() override{
-        cout<<"el director de orquesta esta iniciando la obra";
+        cout<<"el director de orquesta esta iniciando la obra"<<endl;
     }
+    void print(){
+        agrupacionMusical::print();
+        cout<< "Tipo de orquesta: "<<TipoOrquesta<<endl;
+    }
+    friend ostream &operator<<(ostream &output, orquesta o1){
+        o1.agrupacionMusical::print();
+        output<<"Tipo de orquesta: "<<o1.TipoOrquesta<<endl;
+        return output;
+    }
+
 
 
 };
@@ -876,6 +920,7 @@ public:
         cout << "nombre " << getnombre() << endl;
         cout << "precio: " << getprecio() << endl;
     }
+
     friend ostream &operator<<(ostream &output, producto &p)
     {
         p.Distribuidora::print();
@@ -883,9 +928,42 @@ public:
         output << "precio: " << p.getprecio() << endl;
         return output;
     }
+
     string getFrase()
     {
         return "cocacola";
+    }
+
+    virtual string consumo(){
+        string cons = "";
+        return cons;
+    }
+};
+
+class comida: public producto{
+protected:
+    int calorias;
+public:
+    comida(string nombre, int precio,string marca, int calorias):producto(marca,nombre,precio), calorias(calorias){}
+
+    comida(){
+        this->nombre = "";
+        this->precio = 0;
+        this->Marca = "";
+        this->calorias = 0;
+    }
+
+    int getCalorias() const {
+        return calorias;
+    }
+
+    void setCalorias(int calorias) {
+        comida::calorias = calorias;
+    }
+
+    void print() {
+        producto::print();
+        cout<< "caloritas: "<<getCalorias();
     }
 };
 class Seguridad : public Persona
@@ -1248,8 +1326,20 @@ int main()
     // cout << a;
 
     Logistica a(12, "juan", 45, 452, "dddd", "ddfgfdf", "ffvffvv");
-    cout << a;
+    //cout << a;
 
-    agrupacionMusical *a1 = new banda("angelito69",1010,"xd??");
-    a1->tocar();
+    agrupacionMusical *a1 = new banda("angelito69",1010,1,"xd??");
+    //a1->tocar();
+
+    a1 = new orquesta("xd",2020,3,"sifonica");
+    //a1->tocar();
+
+    comida comida1 = comida("papitas",20320,"Margarita",200);
+    //comida1.print();
+
+    agrupacionMusical ag1 = agrupacionMusical("La Mejor de todas",2020,3);
+    banda losRecoditos = banda("los Recoditos de Monterrey", 21,5,"banda");
+    cout<< ag1;
+    cout<< losRecoditos;
+    
 }
