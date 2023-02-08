@@ -558,6 +558,8 @@ public:
         this->FechaValidez = FechaValidez;
     }
 
+
+
     void print()
     {
         cout << "Id del boleto: " << getidBoleto() << endl;
@@ -1201,19 +1203,21 @@ public:
     }
 };
 
-class FuerzaPolicial : public Persona, public Movilizacion
+class FuerzaPolicial
 {
 protected:
     string Rango;
     string Cuadrante;
+    vector<Policia*> policias;
 
 public:
-    FuerzaPolicial() : Persona()
+    FuerzaPolicial()
     {
         Rango = "";
         Cuadrante = "";
+        policias = {};
     }
-    FuerzaPolicial(int id, string nombre, int edad, string Rango, string Cuadrante) : Persona(id, nombre, edad), Rango(Rango), Cuadrante(Cuadrante)
+    FuerzaPolicial(string Rango, string Cuadrante, vector<Policia*> policias) : Rango(Rango), Cuadrante(Cuadrante), policias(policias)
     {
     }
 
@@ -1237,25 +1241,44 @@ public:
         this->Cuadrante = Cuadrante;
     }
 
-    int Salario() override
+    vector<Policia*> getPolicias()
+    {
+        return policias;
+    }
+
+    void setPolicias(vector<Policia*> policias)
+    {
+        this->policias = policias;
+    }
+
+    int getSalario()
     {
         return 0;
     }
-    void print() override
+    void print()
     {
-        Persona::print();
         cout << "Rango es" << getRango() << endl;
         cout << "el cuadrante es: " << getCuadrante() << endl;
+        cout << "Hombres: " << endl;
+        for(Policia* plc : policias)
+        {
+            cout << *plc << endl;
+        }
     }
     friend ostream &operator<<(ostream &output, FuerzaPolicial &p)
     {
-        p.Persona::print();
         output << "Rango es " << p.getRango() << endl;
         output << "el cuadrante es:: " << p.getCuadrante() << endl;
+        output << "Hombres: " << endl;
+        for(Policia* plc : p.getPolicias())
+        {
+            output << *plc << endl;;
+        }
+
         return output;
     }
 
-    string TipoVehiculo() override
+    string TipoVehiculo()
     {
         return "moto";
     }
@@ -1421,9 +1444,8 @@ int main()
     grupo2 = new orquesta("Vienna Philharmonic",1234,3,"no se xd");
     grupo2->tocar();
 
-    vector<securityStaff *> v1 = {};
-    v1.push_back(new Policia(23,"psp", 34, "noche"));
+    vector<Boletos *> v1 = {};
+    v1.push_back(new BoletoNormal(0,"12/01/23",300000));
 
-    v1[0]->usoDeArmas();
-
+    cout<< v1[0]->Manilla();
 }
