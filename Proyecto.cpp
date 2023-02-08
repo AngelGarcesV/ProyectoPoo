@@ -1102,33 +1102,104 @@ public:
         return output;
     }
 };
+class securityStaff{
+public:
+        virtual string usoDeArmas() = 0;
 
-/*class seguridad{
-public:
-    virtual string usoDeArmas()=0;
-};
-class vigilante:public seguridad, Persona{
+};//interfaz
+
+class  seguridad: public Persona,public securityStaff{
 protected:
-    //cualquier atributo no se que poner la vd xd
+    bool experienciaPelea;
+    string turno;
 public:
-    vigilante(string nombre, int id, int edad):persona(nombre,id, edad);
+    seguridad(string nombre, int id, int edad, bool experienciaPelea, string turno):Persona(id,nombre, edad), experienciaPelea(experienciaPelea), turno(turno){}
+
+    seguridad(){
+        this-> nombre = "";
+        this->id = 0;
+        this->edad = 0;
+        this->experienciaPelea = true;
+        this->turno = "";
+    }
+
+    bool isExperienciaPelea() const {
+        return experienciaPelea;
+    }
+
+    void setExperienciaPelea(bool experienciaPelea) {
+        seguridad::experienciaPelea = experienciaPelea;
+    }
+
+    const string &getTurno() const {
+        return turno;
+    }
+
+    void setTurno(const string &turno) {
+        seguridad::turno = turno;
+    }
+
+    int Salario()override{
+        return 0;
+    }
+
     string usoDeArmas() override{
-        string usoDeArmas = "bolillo";
-        cout<< usoDeArmas;
-        return usoDeArmas;
+        string arma = "tengo bolillo";
+        cout<< arma<<endl;
+        return arma;
+    }
+
+    void print(){
+        Persona::print();
+        cout << experienciaPelea<<endl;
+        cout << turno<<endl;
+    }
+
+    friend ostream &operator << (ostream &output, seguridad &s){
+        s.Persona::print();
+        output << s.experienciaPelea << endl;
+        output << s.turno << endl;
+
+    }
+
+};
+class Policia : public Persona, public Movilizacion, public securityStaff
+{
+protected:
+    string identificacionPolicial;
+
+public:
+    Policia(int id, string nombre, int edad, string identificacionPolicial) : Persona(id, nombre, edad), identificacionPolicial(identificacionPolicial) {}
+
+    string getIdentificacionPolicial()
+    {
+        return identificacionPolicial;
+    }
+    void setIdentificacionpolicial(string identificacionPolicial)
+    {
+        this->identificacionPolicial = identificacionPolicial;
+    }
+
+    int Salario() override
+    {
+        return 0;
+    }
+    string TipoVehiculo() override
+    {
+        return "Motora ";
+    }
+    string usoDeArmas() override{
+        string armas = "Tengo un revolver";
+        cout<< armas<< endl;
+        return armas;
+    }
+    friend ostream& operator <<(ostream &output, Policia &p)
+    {
+        p.Persona::print();
+        output << "Identificacion Policial: " << p.getIdentificacionPolicial() << endl;
+        return output;
     }
 };
-class policia:public Persona,seguridad{
-protected:
-    string Rango;
-public:
-    string usoDeArmas() override{
-        string usoDeArma = "Pistola y revolver";
-        cout<<usoDeArma;
-        return usoDeArma;
-    }
-    policia(string nombre, int id, int edad, string Rango):Persona(id,nombre,edad),Rango(Rango){};
-};*/
 
 class FuerzaPolicial : public Persona, public Movilizacion
 {
@@ -1189,6 +1260,7 @@ public:
         return "moto";
     }
 };
+
 class Evento : public Lugar, public Ubicacion, public Efectos
 {
 protected:
@@ -1339,7 +1411,19 @@ int main()
 
     agrupacionMusical ag1 = agrupacionMusical("La Mejor de todas",2020,3);
     banda losRecoditos = banda("los Recoditos de Monterrey", 21,5,"banda");
-    cout<< ag1;
-    cout<< losRecoditos;
-    
+    orquesta ViennaPhilharmonic = orquesta("Vienna Philharmonic",1234,3,"no se xd");
+    //cout<< ag1<<endl;
+    //cout<< losRecoditos<<endl;
+    //cout<< ViennaPhilharmonic<<endl;
+
+    agrupacionMusical* grupo2 = new banda("los Recoditos de Monterrey", 21,5,"banda");
+    grupo2->tocar();
+    grupo2 = new orquesta("Vienna Philharmonic",1234,3,"no se xd");
+    grupo2->tocar();
+
+    vector<securityStaff *> v1 = {};
+    v1.push_back(new Policia(23,"psp", 34, "noche"));
+
+    v1[0]->usoDeArmas();
+
 }
