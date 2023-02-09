@@ -880,6 +880,7 @@ public:
         return "manilla roja";
     }
 };
+
 class producto : public Distribuidora
 {
 protected:
@@ -931,15 +932,7 @@ public:
         return output;
     }
 
-    string getFrase()
-    {
-        return "cocacola";
-    }
-
-    virtual string consumo(){
-        string cons = "";
-        return cons;
-    }
+    virtual void consumo()=0;
 };
 
 class comida: public producto{
@@ -963,11 +956,61 @@ public:
         comida::calorias = calorias;
     }
 
+    string getFrase()override{
+        string fraseComida = "Barriga llena, corazon contento";
+        cout<< fraseComida<<endl;
+        return fraseComida;
+    }
+
+    void consumo()override{
+        cout<< "Comiendo....  (sonido de minecraft**)"<<endl;
+    }
+
     void print() {
         producto::print();
         cout<< "caloritas: "<<getCalorias();
     }
+
+    friend ostream &operator<<(ostream &output, comida &c1){
+        c1.producto::print();
+        output<<"Calorias: "<<c1.calorias<<endl;
+    }
+
 };
+
+class bebida: public producto{
+protected:
+    int azucar;
+public:
+    bebida(string nombre, int precio,string marca, int azucar):producto(marca,nombre,precio),azucar(azucar){}
+
+    bebida(){
+        this->Marca="";
+        this->nombre="";
+        this->precio=0;
+        this->azucar=0;
+    }
+
+    int getAzucar() const {
+        return azucar;
+    }
+
+    void setAzucar(int azucar) {
+        bebida::azucar = azucar;
+    }
+
+    string getFrase() override{
+        string fraseBebida = "Coca-Cola ;))";
+        cout<< fraseBebida<<endl;
+        return fraseBebida;
+    }
+    
+    void consumo()override{
+        cout<< "bebiendo... (glu glu glu)"<<endl;
+    }
+
+};
+
 class Seguridad : public Persona
 {
 protected:
@@ -1014,6 +1057,7 @@ public:
         cout << "Años Experiencia Peleando " << getExperienciaPeleando() << endl;
         cout << "turno del dia: " << getTurno() << endl;
     }
+
     friend ostream &operator<<(ostream &output, Seguridad &p)
     {
         p.Persona::print();
@@ -1022,6 +1066,7 @@ public:
         return output;
     }
 };
+
 class Patrocinador : public Persona
 {
 protected:
@@ -1064,6 +1109,7 @@ public:
         return output;
     }
 };
+
 class Marketing : public Persona
 {
 protected:
@@ -1104,6 +1150,7 @@ public:
         return output;
     }
 };
+
 class securityStaff{
 public:
         virtual string usoDeArmas() = 0;
@@ -1165,6 +1212,7 @@ public:
     }
 
 };
+
 class Policia : public Persona, public Movilizacion, public securityStaff
 {
 protected:
@@ -1353,6 +1401,7 @@ public:
         return true;
     }
 };
+
 class Logistica : public Empleado
 {
 protected:
@@ -1397,11 +1446,13 @@ public:
         return "";
     }
 };
+
 class VendedorEntradas : public Empleado
 {
 protected:
 public:
 };
+
 class Espectador : public Persona
 {
 
@@ -1429,7 +1480,7 @@ int main()
     a1 = new orquesta("xd",2020,3,"sifonica");
     //a1->tocar();
 
-    comida comida1 = comida("papitas",20320,"Margarita",200);
+    comida casdf = comida("papitas",23,"xd",2);
     //comida1.print();
 
     agrupacionMusical ag1 = agrupacionMusical("La Mejor de todas",2020,3);
@@ -1440,12 +1491,27 @@ int main()
     //cout<< ViennaPhilharmonic<<endl;
 
     agrupacionMusical* grupo2 = new banda("los Recoditos de Monterrey", 21,5,"banda");
-    grupo2->tocar();
+    //grupo2->tocar();
     grupo2 = new orquesta("Vienna Philharmonic",1234,3,"no se xd");
-    grupo2->tocar();
+    //grupo2->tocar();
 
-    vector<Boletos *> v1 = {};
-    v1.push_back(new BoletoNormal(0,"12/01/23",300000));
+    //vector<Boletos *> v1 = {};
+    //v1.push_back(new BoletoNormal(0,"12/01/23",300000));
 
-    cout<< v1[0]->Manilla();
-}
+    //cout<< v1[0]->Manilla();
+
+    vector<producto *> inventarioTienda ={};
+        inventarioTienda.push_back(new comida("papitas",2000,"Margarita",100));
+        inventarioTienda.push_back(new bebida("Coca-cola",3000,"Coca-cola",500));
+        inventarioTienda.push_back(new bebida("croasan",2000,"no hay",100));
+
+        for(producto * i : inventarioTienda){
+            i->consumo();
+        }
+
+
+    }
+
+
+
+
