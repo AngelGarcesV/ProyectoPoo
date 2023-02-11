@@ -1,103 +1,10 @@
 #include <iostream>
 #include <vector>
+
+
 using namespace std;
 
-
-class agrupacionMusical{
-protected:
-    string nombre;
-    int id;
-public:
-    agrupacionMusical(string nombre, int id  /*aca puede ir hacer una asociacion*/):nombre(nombre),id(id){}
-
-    agrupacionMusical(){
-        this->nombre = "";
-        this->id = 0;
-    }
-
-    const string &getNombre() const {
-        return nombre;
-    }
-
-    void setNombre(const string &nombre) {
-        agrupacionMusical::nombre = nombre;
-    }
-
-    int getId() const {
-        return id;
-    }
-
-    void setId(int id) {
-        agrupacionMusical::id = id;
-    }
-
-    virtual void tocar(){
-        cout<< "sorry, no hay nada";
-    };
-};
-
-class banda:public agrupacionMusical{
-protected:
-    string genero;
-
-public:
-    banda(string nombre, int id, string genero):agrupacionMusical(nombre,id),genero(genero){}
-    banda(){
-        this->nombre="";
-        this->id=0;
-        this->genero="";
-    }
-
-    void tocar()override{
-        cout<< "tumpa tumpa tumpa tumpa";
-    }
-
-    const string &getGenero() const {
-        return genero;
-    }
-
-    void setGenero(const string &genero) {
-        banda::genero = genero;
-    }
-
-};
-
-class orquesta:public agrupacionMusical{
-protected:
-    string TipoOrquesta;
-
-public:
-    orquesta(string nombre, int id, string tipoOrquesta):agrupacionMusical(nombre,id),TipoOrquesta(tipoOrquesta){}
-
-    orquesta(){
-        this->nombre = "";
-        this->id = 0;
-        this->TipoOrquesta = "";
-    }
-
-    const string &getTipoOrquesta() const {
-        return TipoOrquesta;
-    }
-
-    void setTipoOrquesta(const string &tipoOrquesta) {
-        TipoOrquesta = tipoOrquesta;
-    }
-
-    void tocar() override{
-        cout<<"el director de orquesta esta iniciando la obra";
-    }
-
-
-};
-
-
 // Definimos las interfaces
-class Musica
-{
-public:
-    virtual bool Tocar() = 0;
-};//yo quitaria musica
-
 class ArtistaNacional
 {
 
@@ -574,47 +481,6 @@ public:
 
 // Cierre de clases Abstractas
 // Inicio de Clases Concretas
-
-class Banda : public Persona, public Musica
-{
-protected:
-    int cantidadIntegrantes;
-
-public:
-    Banda() : Persona()
-    {
-        cantidadIntegrantes = 0;
-    }
-    Banda(int id, string nombre, int edad, int cantidadIntegrantes) : Persona(id, nombre, edad), cantidadIntegrantes(cantidadIntegrantes)
-    {
-    }
-
-    int getcantidadIntegrantes()
-    {
-        return cantidadIntegrantes;
-    }
-
-    void setcantidadIntegrantes(int cantidadIntegrantes)
-    {
-        this->cantidadIntegrantes = cantidadIntegrantes;
-    }
-
-    friend ostream &operator<<(ostream &output, Banda &p)
-    {
-        p.Persona::print();
-        output << "Cantidad de integrantes " << p.getcantidadIntegrantes() << endl;
-        return output;
-    }
-
-    int Salario() override
-    {
-        return 1;
-    }
-    bool Tocar() override
-    {
-        return false;
-    }
-};
 class Cantante : public Artista
 {
 protected:
@@ -711,6 +577,229 @@ public:
         return "";
     }
 };
+class Musico : public Artista
+{
+protected:
+    string Instrumento;
+
+public:
+    Musico() : Artista()
+    {
+        Instrumento = "";
+    }
+    Musico(int id, string nombre, int edad, int AñosExperiencia, string apodo, string Instrumento) : Artista(id, nombre, edad, AñosExperiencia, apodo), Instrumento(Instrumento)
+    {
+    }
+
+    string getInstrumento()
+    {
+        return Instrumento;
+    }
+
+    void setInstrumento(string Instrumento)
+    {
+        this->Instrumento = Instrumento;
+    }
+
+    int Salario() override
+    {
+        return 0;
+    }
+    void print() override
+    {
+        Artista::print();
+        cout << "El instrumento que toco es: " << getInstrumento() << endl;
+    }
+    friend ostream &operator<<(ostream &output, Musico &p)
+    {
+        p.Artista::print();
+        output << "El instrumento que toco es:  " << p.getInstrumento() << endl;
+        return output;
+    }
+    string Presentarse() override
+    {
+        return "";
+    }
+};
+
+class agrupacionMusical
+{
+protected:
+    string nombre;
+    int id;
+    int cantidadDeIntegrantes;
+    vector<Musico*> Musicos ;
+
+public:
+    agrupacionMusical(string nombre, int id, int cantidadDeIntegrantes,vector<Musico*> Musicos ) : nombre(nombre), id(id), cantidadDeIntegrantes(cantidadDeIntegrantes),Musicos(Musicos) {}
+
+    agrupacionMusical()
+    {
+        this->nombre = "";
+        this->id = 0;
+        this->cantidadDeIntegrantes = 0;
+        this->Musicos={};
+    }
+
+    const string &getNombre() const
+    {
+        return nombre;
+    }
+
+    void setNombre(const string &nombre)
+    {
+        agrupacionMusical::nombre = nombre;
+    }
+
+    int getId() const
+    {
+        return id;
+    }
+
+    void setId(int id)
+    {
+        agrupacionMusical::id = id;
+    }
+
+    vector<Musico*> getMusicos()
+    {
+        return Musicos;
+    }
+
+    void setMusicos(vector<Musico*>Musicos)
+    {
+        this->Musicos=Musicos;
+    }
+
+    int getCantidadDeIntegrantes() const
+    {
+        return cantidadDeIntegrantes;
+    }
+
+    void setCantidadDeIntegrantes(int cantidadDeIntegrantes)
+    {
+        agrupacionMusical::cantidadDeIntegrantes = cantidadDeIntegrantes;
+    }
+
+    virtual void tocar()
+    {
+        cout << "Upss, no sabemos donde esta la agrupacion!!" << endl;
+    }
+    void print()
+    {
+        int cont = 0;
+        cout << "Nombre De la agrupacion: " << nombre << endl;
+        cout << "Id de la agrupacion: " << id << endl;
+        cout << "Cantidad de integrantes: " << cantidadDeIntegrantes << endl;
+        cout<<"Información de los Musicos: \n"<<endl;
+        for(Musico* music1 :Musicos){
+            cont+=1;
+            cout<<"Informacion Del Musico #"<<cont<<endl;
+            cout<<"Id: "<<music1->getId()<<endl;
+            cout<< "Nombre del musico: "<<getNombre()<<endl;
+            cout<< "Edad: "<<music1->getEdad()<<endl;
+            cout<< "Años de experiencia: "<<music1->getAñosExperiencia()<<endl;
+            cout<< "Apodo: "<<music1->getApodo()<<endl;
+            cout<< "Instrumento que toca: "<<music1->getInstrumento()<<endl<<endl;
+
+
+        }
+    }
+
+    friend ostream &operator<<(ostream &output, agrupacionMusical &m1)
+    {
+        output << "Nombre: " << m1.nombre << endl;
+        output << "Id: " << m1.id << endl;
+        output << "Cantidad de integranges: " << m1.cantidadDeIntegrantes << endl;
+        return output;
+    }
+};
+class banda : public agrupacionMusical
+{
+protected:
+    string genero;
+
+public:
+    banda(string nombre, int id, int cantidadDeIntegrantes,vector<Musico* > Musicos, string genero) : agrupacionMusical(nombre, id, cantidadDeIntegrantes, Musicos), genero(genero) {}
+    banda()
+    {
+        this->nombre = "";
+        this->id = 0;
+        this->cantidadDeIntegrantes = 0;
+        this->genero = "";
+    }
+
+    void tocar() override
+    {
+        cout << "tumpa tumpa tumpa tumpa" << endl;
+    }
+
+    const string &getGenero() const
+    {
+        return genero;
+    }
+
+    void setGenero(const string &genero)
+    {
+        banda::genero = genero;
+    }
+
+    void print()
+    {
+        agrupacionMusical::print();
+        cout << "Genero de la banda: " << genero << "\n\n";
+    }
+    friend ostream &operator<<(ostream &output, banda &b1)
+    {
+        b1.agrupacionMusical::print();
+        output << "Genero: " << b1.genero << endl;
+        return output;
+    }
+};
+class orquesta : public agrupacionMusical
+{
+protected:
+    string TipoOrquesta;
+
+public:
+    orquesta(string nombre, int id, int cantidadDeIntegrantes,vector<Musico*> Musico, string tipoOrquesta) : agrupacionMusical(nombre, id, cantidadDeIntegrantes,Musicos), TipoOrquesta(tipoOrquesta) {}
+
+    orquesta()
+    {
+        this->nombre = "";
+        this->id = 0;
+        this->cantidadDeIntegrantes = 0;
+        this->TipoOrquesta = "";
+    }
+
+    const string &getTipoOrquesta() const
+    {
+        return TipoOrquesta;
+    }
+
+    void setTipoOrquesta(const string &tipoOrquesta)
+    {
+        TipoOrquesta = tipoOrquesta;
+    }
+
+    void tocar() override
+    {
+        cout << "el director de orquesta esta iniciando la obra" << endl;
+    }
+    void print()
+    {
+        agrupacionMusical::print();
+        cout << "Tipo de orquesta: " << TipoOrquesta << endl;
+    }
+    friend ostream &operator<<(ostream &output, orquesta &o1)
+    {
+        o1.agrupacionMusical::print();
+        output << "Tipo de orquesta: " << o1.TipoOrquesta << endl;
+        return output;
+    }
+};
+
+
 class BoletoNormal : public Boletos
 {
 protected:
@@ -876,6 +965,7 @@ public:
         cout << "nombre " << getnombre() << endl;
         cout << "precio: " << getprecio() << endl;
     }
+
     friend ostream &operator<<(ostream &output, producto &p)
     {
         p.Distribuidora::print();
@@ -883,9 +973,48 @@ public:
         output << "precio: " << p.getprecio() << endl;
         return output;
     }
+
     string getFrase()
     {
         return "cocacola";
+    }
+
+    virtual string consumo()
+    {
+        string cons = "";
+        return cons;
+    }
+};
+class comida : public producto
+{
+protected:
+    int calorias;
+
+public:
+    comida(string nombre, int precio, string marca, int calorias) : producto(marca, nombre, precio), calorias(calorias) {}
+
+    comida()
+    {
+        this->nombre = "";
+        this->precio = 0;
+        this->Marca = "";
+        this->calorias = 0;
+    }
+
+    int getCalorias() const
+    {
+        return calorias;
+    }
+
+    void setCalorias(int calorias)
+    {
+        comida::calorias = calorias;
+    }
+
+    void print()
+    {
+        producto::print();
+        cout << "caloritas: " << getCalorias();
     }
 };
 class Seguridad : public Persona
@@ -1025,46 +1154,54 @@ public:
     }
 };
 
-/*class seguridad{
-public:
-    virtual string usoDeArmas()=0;
-};
-class vigilante:public seguridad, Persona{
+class Policia : public Persona,
+                public Movilizacion
+{
 protected:
-    //cualquier atributo no se que poner la vd xd
-public:
-    vigilante(string nombre, int id, int edad):persona(nombre,id, edad);
-    string usoDeArmas() override{
-        string usoDeArmas = "bolillo";
-        cout<< usoDeArmas;
-        return usoDeArmas;
-    }
-};
-class policia:public Persona,seguridad{
-protected:
-    string Rango;
-public:
-    string usoDeArmas() override{
-        string usoDeArma = "Pistola y revolver";
-        cout<<usoDeArma;
-        return usoDeArma;
-    }
-    policia(string nombre, int id, int edad, string Rango):Persona(id,nombre,edad),Rango(Rango){};
-};*/
+    string identificacionPolicial;
 
-class FuerzaPolicial : public Persona, public Movilizacion
+public:
+    Policia(int id, string nombre, int edad, string identificacionPolicial) : Persona(id, nombre, edad), identificacionPolicial(identificacionPolicial) {}
+
+    string getIdentificacionPolicial()
+    {
+        return identificacionPolicial;
+    }
+    void setIdentificacionpolicial(string identificacionPolicial)
+    {
+        this->identificacionPolicial = identificacionPolicial;
+    }
+
+    int Salario() override
+    {
+        return 0;
+    }
+    string TipoVehiculo() override
+    {
+        return "Motora ";
+    }
+    friend ostream &operator<<(ostream &output, Policia &p)
+    {
+        p.Persona::print();
+        output << "Identificacion Policial: " << p.getIdentificacionPolicial() << endl;
+        return output;
+    }
+};
+class FuerzaPolicial
 {
 protected:
     string Rango;
     string Cuadrante;
+    vector<Policia *> policias;
 
 public:
-    FuerzaPolicial() : Persona()
+    FuerzaPolicial()
     {
         Rango = "";
         Cuadrante = "";
+        policias = {};
     }
-    FuerzaPolicial(int id, string nombre, int edad, string Rango, string Cuadrante) : Persona(id, nombre, edad), Rango(Rango), Cuadrante(Cuadrante)
+    FuerzaPolicial(string Rango, string Cuadrante, vector<Policia *> policias) : Rango(Rango), Cuadrante(Cuadrante), policias(policias)
     {
     }
 
@@ -1088,25 +1225,45 @@ public:
         this->Cuadrante = Cuadrante;
     }
 
-    int Salario() override
+    vector<Policia *> getPolicias()
+    {
+        return policias;
+    }
+
+    void setPolicias(vector<Policia *> policias)
+    {
+        this->policias = policias;
+    }
+
+    int getSalario()
     {
         return 0;
     }
-    void print() override
+    void print()
     {
-        Persona::print();
         cout << "Rango es" << getRango() << endl;
         cout << "el cuadrante es: " << getCuadrante() << endl;
+        cout << "Hombres: " << endl;
+        for (Policia *plc : policias)
+        {
+            cout << *plc << endl;
+        }
     }
     friend ostream &operator<<(ostream &output, FuerzaPolicial &p)
     {
-        p.Persona::print();
         output << "Rango es " << p.getRango() << endl;
         output << "el cuadrante es:: " << p.getCuadrante() << endl;
+        output << "Hombres: " << endl;
+        for (Policia *plc : p.getPolicias())
+        {
+            output << *plc << endl;
+            ;
+        }
+
         return output;
     }
 
-    string TipoVehiculo() override
+    string TipoVehiculo()
     {
         return "moto";
     }
@@ -1237,19 +1394,20 @@ public:
 
 int main()
 {
-    // FuerzaPolicial a(45, "jajaja", 45, "cadete", "catama");
-    // cout << a;
-    // Marketing b(45, "jajaja", 45,4);
-    // cout << b;
-    // Patrocinador c(45, "jajaja", 45,"sasoftco");
-    // cout << c;
 
-    // Evento *a = new Evento("el j", 15, 54, "c", "villa", "j", 45);
-    // cout << a;
 
-    Logistica a(12, "juan", 45, 452, "dddd", "ddfgfdf", "ffvffvv");
-    cout << a;
 
-    agrupacionMusical *a1 = new banda("angelito69",1010,"xd??");
-    a1->tocar();
+
+    /*
+    vector<Musico*> musicos={};
+    Musico *m1 = new Musico(1234, "CuloAcido", 69, 96, "Culito", "La polla");
+    Musico *m2 = new Musico(1234, "CuloSeco", 69, 96, "cola", " labios frios");
+    Musico *m3 = new Musico(1234, "La puñalada del bardo", 69, 96, "el dingli", "La polla");
+
+    musicos={
+            m1,m2,m3
+    };
+    banda losRecoditos = banda("los Recoditos de Monterrey", 2321, musicos.size(), musicos, "sex");
+    losRecoditos.print();
+     */
 }
