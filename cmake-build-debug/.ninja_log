@@ -1,0 +1,24 @@
+# ninja log v5
+1	244	6977792189112244	build.ninja	aa9cdfab1f6cfc6f
+3	856	6977622639975965	CMakeFiles/Proyecto_final.dir/Proyecto.cpp.obj	998c3875822089e4
+857	1067	6977622641751978	Proyecto_final.exe	24744ae22dea2c38
+4	887	6977796428889544	CMakeFiles/Proyecto_final.dir/Proyecto.cpp.obj	998c3875822089e4
+887	1147	6977796431420557	Proyecto_final.exe	24744ae22dea2c38
+4	944	6977798565778128	CMakeFiles/Proyecto_final.dir/Proyecto.cpp.obj	998c3875822089e4
+944	1117	6977798567431090	Proyecto_final.exe	24744ae22dea2c38
+3	818	6977798854391564	CMakeFiles/Proyecto_final.dir/Proyecto.cpp.obj	998c3875822089e4
+818	1000	6977798856125959	Proyecto_final.exe	24744ae22dea2c38
+2	912	6977799046405749	CMakeFiles/Proyecto_final.dir/Proyecto.cpp.obj	998c3875822089e4
+916	1088	6977799048172375	Proyecto_final.exe	24744ae22dea2c38
+3	1028	6977799393049862	CMakeFiles/Proyecto_final.dir/Proyecto.cpp.obj	998c3875822089e4
+1029	1204	6977799394762089	Proyecto_final.exe	24744ae22dea2c38
+2	782	6977813250355868	CMakeFiles/Proyecto_final.dir/Proyecto.cpp.obj	998c3875822089e4
+783	1039	6977813252834960	Proyecto_final.exe	24744ae22dea2c38
+2	1146	6977814113232689	CMakeFiles/Proyecto_final.dir/Proyecto.cpp.obj	998c3875822089e4
+1146	1378	6977814115402227	Proyecto_final.exe	24744ae22dea2c38
+5	1102	6977814729627933	CMakeFiles/Proyecto_final.dir/Proyecto.cpp.obj	998c3875822089e4
+1102	1256	6977814731104690	Proyecto_final.exe	24744ae22dea2c38
+3	1060	6977909571507710	CMakeFiles/Proyecto_final.dir/Proyecto.cpp.obj	998c3875822089e4
+1060	1282	6977909573637077	Proyecto_final.exe	24744ae22dea2c38
+4	938	6977910349175726	CMakeFiles/Proyecto_final.dir/Proyecto.cpp.obj	998c3875822089e4
+938	1151	6977910351188639	Proyecto_final.exe	24744ae22dea2c38
