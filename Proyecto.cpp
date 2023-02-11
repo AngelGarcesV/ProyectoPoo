@@ -1,147 +1,10 @@
 #include <iostream>
 #include <vector>
+
+
 using namespace std;
 
-
-class  agrupacionMusical{
-protected:
-    string nombre;
-    int id;
-    int cantidadDeIntegrantes;
-public:
-    agrupacionMusical(string nombre, int id, int cantidadDeIntegrantes  /*aca puede ir hacer una asociacion*/):nombre(nombre),id(id),cantidadDeIntegrantes(cantidadDeIntegrantes){}
-
-    agrupacionMusical(){
-        this->nombre = "";
-        this->id = 0;
-        this->cantidadDeIntegrantes = 0;
-    }
-
-    const string &getNombre() const {
-        return nombre;
-    }
-
-    void setNombre(const string &nombre) {
-        agrupacionMusical::nombre = nombre;
-    }
-
-    int getId() const {
-        return id;
-    }
-
-    void setId(int id) {
-        agrupacionMusical::id = id;
-    }
-
-    int getCantidadDeIntegrantes() const {
-        return cantidadDeIntegrantes;
-    }
-
-    void setCantidadDeIntegrantes(int cantidadDeIntegrantes) {
-        agrupacionMusical::cantidadDeIntegrantes = cantidadDeIntegrantes;
-    }
-
-    virtual void tocar(){
-        cout<< "Upss, no sabemos donde esta la agrupacion!!"<<endl;
-    }
-    void print(){
-        cout<< "Nombre: "<<nombre<<endl;
-        cout<< "Id: "<<id<<endl;
-        cout<< "Cantidad de integrantes: "<<cantidadDeIntegrantes<<endl;
-    }
-
-    friend ostream &operator<<(ostream &output, agrupacionMusical &m1){
-        output<<"Nombre: "<<m1.nombre<<endl;
-        output<<"Id: "<< m1.id<<endl;
-        output<<"Cantidad de integranges: "<<m1.cantidadDeIntegrantes<<endl;
-        return output;
-    }
-
-
-};
-
-class banda:public agrupacionMusical{
-protected:
-    string genero;
-    
-public:
-    banda(string nombre, int id, int cantidadDeIntegrantes,string genero):agrupacionMusical(nombre,id,cantidadDeIntegrantes),genero(genero){}
-    banda(){
-        this->nombre="";
-        this->id=0;
-        this->cantidadDeIntegrantes = 0;
-        this->genero="";
-    }
-
-    void tocar()override{
-        cout<< "tumpa tumpa tumpa tumpa"<<endl;
-    }
-
-    const string &getGenero() const {
-        return genero;
-    }
-
-    void setGenero(const string &genero) {
-        banda::genero = genero;
-    }
-    
-    void print(){
-        agrupacionMusical::print();
-        cout<< "Genero: "<<genero<<endl;
-    }
-    friend ostream &operator<<(ostream &output, banda &b1){
-        b1.agrupacionMusical::print();
-        output<<"Genero: "<<b1.genero<<endl;
-    }
-};
-
-class orquesta:public agrupacionMusical{
-protected:
-    string TipoOrquesta;
-
-public:
-    orquesta(string nombre, int id, int cantidadDeIntegrantes, string tipoOrquesta):agrupacionMusical(nombre,id,cantidadDeIntegrantes),TipoOrquesta(tipoOrquesta){}
-
-    orquesta(){
-        this->nombre = "";
-        this->id = 0;
-        this->cantidadDeIntegrantes = 0;
-        this->TipoOrquesta = "";
-    }
-
-    const string &getTipoOrquesta() const {
-        return TipoOrquesta;
-    }
-
-    void setTipoOrquesta(const string &tipoOrquesta) {
-        TipoOrquesta = tipoOrquesta;
-    }
-
-    void tocar() override{
-        cout<<"el director de orquesta esta iniciando la obra"<<endl;
-    }
-    void print(){
-        agrupacionMusical::print();
-        cout<< "Tipo de orquesta: "<<TipoOrquesta<<endl;
-    }
-    friend ostream &operator<<(ostream &output, orquesta o1){
-        o1.agrupacionMusical::print();
-        output<<"Tipo de orquesta: "<<o1.TipoOrquesta<<endl;
-        return output;
-    }
-
-
-
-};
-
-
 // Definimos las interfaces
-class Musica
-{
-public:
-    virtual bool Tocar() = 0;
-};//yo quitaria musica
-
 class ArtistaNacional
 {
 
@@ -620,47 +483,6 @@ public:
 
 // Cierre de clases Abstractas
 // Inicio de Clases Concretas
-
-class Banda : public Persona, public Musica
-{
-protected:
-    int cantidadIntegrantes;
-
-public:
-    Banda() : Persona()
-    {
-        cantidadIntegrantes = 0;
-    }
-    Banda(int id, string nombre, int edad, int cantidadIntegrantes) : Persona(id, nombre, edad), cantidadIntegrantes(cantidadIntegrantes)
-    {
-    }
-
-    int getcantidadIntegrantes()
-    {
-        return cantidadIntegrantes;
-    }
-
-    void setcantidadIntegrantes(int cantidadIntegrantes)
-    {
-        this->cantidadIntegrantes = cantidadIntegrantes;
-    }
-
-    friend ostream &operator<<(ostream &output, Banda &p)
-    {
-        p.Persona::print();
-        output << "Cantidad de integrantes " << p.getcantidadIntegrantes() << endl;
-        return output;
-    }
-
-    int Salario() override
-    {
-        return 1;
-    }
-    bool Tocar() override
-    {
-        return false;
-    }
-};
 class Cantante : public Artista
 {
 protected:
@@ -757,6 +579,229 @@ public:
         return "";
     }
 };
+class Musico : public Artista
+{
+protected:
+    string Instrumento;
+
+public:
+    Musico() : Artista()
+    {
+        Instrumento = "";
+    }
+    Musico(int id, string nombre, int edad, int AñosExperiencia, string apodo, string Instrumento) : Artista(id, nombre, edad, AñosExperiencia, apodo), Instrumento(Instrumento)
+    {
+    }
+
+    string getInstrumento()
+    {
+        return Instrumento;
+    }
+
+    void setInstrumento(string Instrumento)
+    {
+        this->Instrumento = Instrumento;
+    }
+
+    int Salario() override
+    {
+        return 0;
+    }
+    void print() override
+    {
+        Artista::print();
+        cout << "El instrumento que toco es: " << getInstrumento() << endl;
+    }
+    friend ostream &operator<<(ostream &output, Musico &p)
+    {
+        p.Artista::print();
+        output << "El instrumento que toco es:  " << p.getInstrumento() << endl;
+        return output;
+    }
+    string Presentarse() override
+    {
+        return "";
+    }
+};
+
+class agrupacionMusical
+{
+protected:
+    string nombre;
+    int id;
+    int cantidadDeIntegrantes;
+    vector<Musico*> Musicos ;
+
+public:
+    agrupacionMusical(string nombre, int id, int cantidadDeIntegrantes,vector<Musico*> Musicos ) : nombre(nombre), id(id), cantidadDeIntegrantes(cantidadDeIntegrantes),Musicos(Musicos) {}
+
+    agrupacionMusical()
+    {
+        this->nombre = "";
+        this->id = 0;
+        this->cantidadDeIntegrantes = 0;
+        this->Musicos={};
+    }
+
+    const string &getNombre() const
+    {
+        return nombre;
+    }
+
+    void setNombre(const string &nombre)
+    {
+        agrupacionMusical::nombre = nombre;
+    }
+
+    int getId() const
+    {
+        return id;
+    }
+
+    void setId(int id)
+    {
+        agrupacionMusical::id = id;
+    }
+
+    vector<Musico*> getMusicos()
+    {
+        return Musicos;
+    }
+
+    void setMusicos(vector<Musico*>Musicos)
+    {
+        this->Musicos=Musicos;
+    }
+
+    int getCantidadDeIntegrantes() const
+    {
+        return cantidadDeIntegrantes;
+    }
+
+    void setCantidadDeIntegrantes(int cantidadDeIntegrantes)
+    {
+        agrupacionMusical::cantidadDeIntegrantes = cantidadDeIntegrantes;
+    }
+
+    virtual void tocar()
+    {
+        cout << "Upss, no sabemos donde esta la agrupacion!!" << endl;
+    }
+    void print()
+    {
+        int cont = 0;
+        cout << "Nombre De la agrupacion: " << nombre << endl;
+        cout << "Id de la agrupacion: " << id << endl;
+        cout << "Cantidad de integrantes: " << cantidadDeIntegrantes << endl;
+        cout<<"Información de los Musicos: \n"<<endl;
+        for(Musico* music1 :Musicos){
+            cont+=1;
+            cout<<"Informacion Del Musico #"<<cont<<endl;
+            cout<<"Id: "<<music1->getId()<<endl;
+            cout<< "Nombre del musico: "<<getNombre()<<endl;
+            cout<< "Edad: "<<music1->getEdad()<<endl;
+            cout<< "Años de experiencia: "<<music1->getAñosExperiencia()<<endl;
+            cout<< "Apodo: "<<music1->getApodo()<<endl;
+            cout<< "Instrumento que toca: "<<music1->getInstrumento()<<endl<<endl;
+
+
+        }
+    }
+
+    friend ostream &operator<<(ostream &output, agrupacionMusical &m1)
+    {
+        output << "Nombre: " << m1.nombre << endl;
+        output << "Id: " << m1.id << endl;
+        output << "Cantidad de integranges: " << m1.cantidadDeIntegrantes << endl;
+        return output;
+    }
+};
+class banda : public agrupacionMusical
+{
+protected:
+    string genero;
+
+public:
+    banda(string nombre, int id, int cantidadDeIntegrantes,vector<Musico* > Musicos, string genero) : agrupacionMusical(nombre, id, cantidadDeIntegrantes, Musicos), genero(genero) {}
+    banda()
+    {
+        this->nombre = "";
+        this->id = 0;
+        this->cantidadDeIntegrantes = 0;
+        this->genero = "";
+    }
+
+    void tocar() override
+    {
+        cout << "tumpa tumpa tumpa tumpa" << endl;
+    }
+
+    const string &getGenero() const
+    {
+        return genero;
+    }
+
+    void setGenero(const string &genero)
+    {
+        banda::genero = genero;
+    }
+
+    void print()
+    {
+        agrupacionMusical::print();
+        cout << "Genero de la banda: " << genero << "\n\n";
+    }
+    friend ostream &operator<<(ostream &output, banda &b1)
+    {
+        b1.agrupacionMusical::print();
+        output << "Genero: " << b1.genero << endl;
+        return output;
+    }
+};
+class orquesta : public agrupacionMusical
+{
+protected:
+    string TipoOrquesta;
+
+public:
+    orquesta(string nombre, int id, int cantidadDeIntegrantes,vector<Musico*> Musico, string tipoOrquesta) : agrupacionMusical(nombre, id, cantidadDeIntegrantes,Musicos), TipoOrquesta(tipoOrquesta) {}
+
+    orquesta()
+    {
+        this->nombre = "";
+        this->id = 0;
+        this->cantidadDeIntegrantes = 0;
+        this->TipoOrquesta = "";
+    }
+
+    const string &getTipoOrquesta() const
+    {
+        return TipoOrquesta;
+    }
+
+    void setTipoOrquesta(const string &tipoOrquesta)
+    {
+        TipoOrquesta = tipoOrquesta;
+    }
+
+    void tocar() override
+    {
+        cout << "el director de orquesta esta iniciando la obra" << endl;
+    }
+    void print()
+    {
+        agrupacionMusical::print();
+        cout << "Tipo de orquesta: " << TipoOrquesta << endl;
+    }
+    friend ostream &operator<<(ostream &output, orquesta &o1)
+    {
+        o1.agrupacionMusical::print();
+        output << "Tipo de orquesta: " << o1.TipoOrquesta << endl;
+        return output;
+    }
+};
+
+
 class BoletoNormal : public Boletos
 {
 protected:
@@ -932,7 +977,11 @@ public:
         return output;
     }
 
+    string getFrase()=0;
+
+
     virtual void consumo()=0;
+
 };
 
 class comida: public producto{
@@ -1461,57 +1510,31 @@ public:
 
 int main()
 {
-    // FuerzaPolicial a(45, "jajaja", 45, "cadete", "catama");
-    // cout << a;
-    // Marketing b(45, "jajaja", 45,4);
-    // cout << b;
-    // Patrocinador c(45, "jajaja", 45,"sasoftco");
-    // cout << c;
-
-    // Evento *a = new Evento("el j", 15, 54, "c", "villa", "j", 45);
-    // cout << a;
-
-    Logistica a(12, "juan", 45, 452, "dddd", "ddfgfdf", "ffvffvv");
-    //cout << a;
-
-    agrupacionMusical *a1 = new banda("angelito69",1010,1,"xd??");
-    //a1->tocar();
-
-    a1 = new orquesta("xd",2020,3,"sifonica");
-    //a1->tocar();
-
-    comida casdf = comida("papitas",23,"xd",2);
-    //comida1.print();
-
-    agrupacionMusical ag1 = agrupacionMusical("La Mejor de todas",2020,3);
-    banda losRecoditos = banda("los Recoditos de Monterrey", 21,5,"banda");
-    orquesta ViennaPhilharmonic = orquesta("Vienna Philharmonic",1234,3,"no se xd");
-    //cout<< ag1<<endl;
-    //cout<< losRecoditos<<endl;
-    //cout<< ViennaPhilharmonic<<endl;
-
-    agrupacionMusical* grupo2 = new banda("los Recoditos de Monterrey", 21,5,"banda");
-    //grupo2->tocar();
-    grupo2 = new orquesta("Vienna Philharmonic",1234,3,"no se xd");
-    //grupo2->tocar();
-
-    //vector<Boletos *> v1 = {};
-    //v1.push_back(new BoletoNormal(0,"12/01/23",300000));
-
-    //cout<< v1[0]->Manilla();
-
-    vector<producto *> inventarioTienda ={};
-        inventarioTienda.push_back(new comida("papitas",2000,"Margarita",100));
-        inventarioTienda.push_back(new bebida("Coca-cola",3000,"Coca-cola",500));
-        inventarioTienda.push_back(new bebida("croasan",2000,"no hay",100));
-
-        for(producto * i : inventarioTienda){
-            i->consumo();
-        }
-
-
-    }
+    string festival = "";
+    int opc = 0;
+    cout<< "HOLAA!!, Aca planearemos nuestro festival"<<endl;
+    cout<< "Pero primero necesitamos un nombre para este"<<endl;
+    cout<< "por favor, ingresa el nombre del festival: ";
+    cin>>festival;
+    cout<< "\nAHORA PODREMOS DAR LA BIENVENIDA AL FESTIVAL "+festival<<endl;
+    cout<< "pero necesitamos hacer la preparación del evento\n\n";
+    cout<< "iniciaremos con las cosas indispensables"<<endl;
 
 
 
 
+
+
+    /*
+    vector<Musico*> musicos={};
+    Musico *m1 = new Musico(1234, "CuloAcido", 69, 96, "Culito", "La polla");
+    Musico *m2 = new Musico(1234, "CuloSeco", 69, 96, "cola", " labios frios");
+    Musico *m3 = new Musico(1234, "La puñalada del bardo", 69, 96, "el dingli", "La polla");
+
+    musicos={
+            m1,m2,m3
+    };
+    banda losRecoditos = banda("los Recoditos de Monterrey", 2321, musicos.size(), musicos, "sex");
+    losRecoditos.print();
+     */
+}
