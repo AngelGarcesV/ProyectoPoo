@@ -82,7 +82,7 @@ public:
     }
     // Definimos el metodo virtualmente puro
     virtual int Salario() = 0;
-
+    virtual int getTipo()=0;
     // Hacemos la encapsulacion
     int getId()
     {
@@ -145,7 +145,9 @@ public:
     Artista(int id, string nombre, int edad, int AñosExperiencia, string apodo) : Persona(id, nombre, edad), AñosExperiencia(AñosExperiencia), apodo(apodo)
     {
     }
-
+    int getTipo() override{
+        return 1;
+    }
     int getAñosExperiencia()
     {
         return AñosExperiencia;
@@ -202,6 +204,10 @@ public:
     }
     Empleado(int id, string nombre, int edad, int idTrabajador, string Usuario, string Contraseña) : Persona(id, nombre, edad), idTrabajador(idTrabajador), Usuario(Usuario), Contraseña(Contraseña)
     {
+    }
+
+    int getTipo() override{
+        return 2;
     }
 
     int getidTrabajador()
@@ -496,7 +502,9 @@ public:
     Cantante(int id, string nombre, int edad, string genero, int AñosExperiencia, string apodo) : Artista(id, nombre, edad, AñosExperiencia, apodo), genero(genero)
     {
     }
-
+    int getTipo() override{
+        return 3;
+    }
     string getgenero()
     {
         return genero;
@@ -535,6 +543,9 @@ public:
     Dj() : Artista()
     {
         ciudad = "";
+    }
+    int getTipo() override{
+        return 4;
     }
     Dj(int id, string nombre, int edad, int AñosExperiencia, string apodo, string ciudad) : Artista(id, nombre, edad, AñosExperiencia, apodo), ciudad(ciudad)
     {
@@ -579,7 +590,7 @@ public:
         return "";
     }
 };
-class Musico : public Artista
+class  Musico : public Artista
 {
 protected:
     string Instrumento;
@@ -588,6 +599,9 @@ public:
     Musico() : Artista()
     {
         Instrumento = "";
+    }
+    int getTipo() override{
+        return 5;
     }
     Musico(int id, string nombre, int edad, int AñosExperiencia, string apodo, string Instrumento) : Artista(id, nombre, edad, AñosExperiencia, apodo), Instrumento(Instrumento)
     {
@@ -1072,6 +1086,7 @@ public:
         ExperienciaPeleando = 0;
         Turno = "";
     }
+    int getTipo() override{return 6;}
     Seguridad(int id, string nombre, int edad, bool ExperienciaPeleando, string Turno) : Persona(id, nombre, edad), ExperienciaPeleando(ExperienciaPeleando), Turno(Turno)
     {
     }
@@ -1126,6 +1141,9 @@ public:
     {
         Empresa = "";
     }
+    int getTipo() override{
+        return 7;
+    }
     Patrocinador(int id, string nombre, int edad, string Empresa) : Persona(id, nombre, edad), Empresa(Empresa)
     {
     }
@@ -1168,6 +1186,9 @@ public:
     Marketing() : Persona()
     {
         Experiencia = 0;
+    }
+    int getTipo() override{
+        return 8;
     }
     Marketing(int id, string nombre, int edad, int Experiencia) : Persona(id, nombre, edad), Experiencia(Experiencia)
     {
@@ -1220,6 +1241,9 @@ public:
         this->experienciaPelea = true;
         this->turno = "";
     }
+    int getTipo() override{
+        return 9;
+    }
 
     bool isExperienciaPelea() const {
         return experienciaPelea;
@@ -1270,6 +1294,7 @@ protected:
 public:
     Policia(int id, string nombre, int edad, string identificacionPolicial) : Persona(id, nombre, edad), identificacionPolicial(identificacionPolicial) {}
 
+    int getTipo() override{return 10;}
     string getIdentificacionPolicial()
     {
         return identificacionPolicial;
@@ -1393,7 +1418,7 @@ public:
         Titulo = "";
         TiendasDisponibles = 0;
     }
-    Evento(string NombreLugar, double CapacidadMinima, double CapacidadMaxima, string Direccion, string Ciudad, string Titulo, int TiendasDisponibles) : Lugar(NombreLugar, CapacidadMinima, CapacidadMaxima), Ubicacion(Direccion, ciudad), Titulo(Titulo), TiendasDisponibles(TiendasDisponibles)
+    Evento(string NombreLugar, double CapacidadMinima, double CapacidadMaxima, string Direccion, string Ciudad, string Titulo, int TiendasDisponibles) : Lugar(NombreLugar, CapacidadMinima, CapacidadMaxima), Ubicacion(Direccion, Ciudad), Titulo(Titulo), TiendasDisponibles(TiendasDisponibles)
     {
     }
 
@@ -1461,6 +1486,9 @@ public:
     {
         cargo = "";
     }
+    int getTipo() override{
+        return 11;
+    }
     Logistica(int id, string nombre, int edad, int idTrabajador, string Usuario, string Contraseña, string cargo) : Empleado(id, nombre, edad, idTrabajador, Usuario, Contraseña), cargo(cargo)
     {
     }
@@ -1500,18 +1528,59 @@ class VendedorEntradas : public Empleado
 {
 protected:
 public:
+    int getTipo() override{
+    return 12;
+}
 };
+//falta espectador
 
-class Espectador : public Persona
+class Espectador : public Persona,Pago,MetodoPago
 {
-
+protected:
+    string correo;
 public:
+    Espectador():Persona(){}
+
+    Espectador(string nombre,int id, int edad,string correo):Persona(id,nombre,edad){}
+
+    int getTipo() override{
+        return 13;
+    }
+
+    int Salario()override{
+        return 0;
+    }
+
+    bool ComprarBoleta()override{
+        return true;
+    }
+
+    virtual bool Tarjeta() override{
+        return true;}
+    virtual bool Efectivo(){
+        return true;
+    } 
+    virtual bool Nequi()override{
+        return false;
+    }
+    
+    void print(){
+        Persona::print();
+        cout<< "Correo: "<< this->correo;
+    }
+
+    friend ostream &operator<<(ostream &output, Espectador &e1){
+        e1.Persona::print();
+        output<<"Correo: "<<e1.correo;
+        return output;
+    }
 };
 
 int main()
 {
-    string festival = "";
-    int opc = 0;
+    string festival = "",nombreLugar = "",direccion = "",ciudad = "",titulo = "";
+    double capacidadMinima = 0,capacidadMaxima = 0;
+    int opc = 0,TiendasDisponibles = 0;
     cout<< "HOLAA!!, Aca planearemos nuestro festival"<<endl;
     cout<< "Pero primero necesitamos un nombre para este"<<endl;
     cout<< "por favor, ingresa el nombre del festival: ";
@@ -1520,21 +1589,118 @@ int main()
     cout<< "pero necesitamos hacer la preparación del evento\n\n";
     cout<< "iniciaremos con las cosas indispensables"<<endl;
 
+    cout<< "Para crear el evento necesitamos la siguiente informacion: "<<endl;
+    cout<< "Nombre del lugar donde se hara el "+festival<<": "<<endl;
+    cin>>nombreLugar;
+    cout<< "Capacidad minima: ";
+    cin>>capacidadMinima;
+    cout<< "Capacidad maxima: ";
+    cin>>capacidadMaxima;
+    cout<< "Direccion del evento: ";
+    cin>>direccion;
+    cout<< "Ciudad del evento: ";
+    cin>>ciudad;
+    cout<< "titulo o slogan: ";
+    cin>>titulo;
+    cout<< "Numero de tiendas disponibles";
+    cin>>TiendasDisponibles;
+    Evento ev = Evento(nombreLugar,capacidadMinima,capacidadMaxima,direccion,ciudad,titulo,TiendasDisponibles);
+
+    while(opc != 10){
+        cout<<"1. Agregar una agrupacion musical\n"
+              "2. crear Nuevo evento\n"
+              "3. Agregar un patrocinador.\n"
+              "4. Agregar un Artista\n"
+              "5. Agregar Personal de Marketing\n"
+              "6. Agregar un Empleado\n"
+              "7. Agregar un patrocinador\n"
+              "8. Agregar un espectador\n"
+              "9. Agregar seguridad al evento\n"
+              "10. Agregar fuerza policial\n "
+              "Ingrese una opción";
+        cin>>opc;
+        switch (opc) {
+            case 1:
+                int opcAgrupacionMusical = 0;
+                cout<< "1. Banda\n2.Orquesta\nIngrese una opcion: ";
+                cin>>opcAgrupacionMusical;
+
+
+                if(opcAgrupacionMusical == 1) {
+                    int id = 0,numIntegrantes=0, contAM=1,edadMusico = 0,añosExpMusico = 0,idMusico=0;
+                    string nombre = "",nombreMusico,apodoMusico,instrumento,genero;
+                    vector <Musico*> musicians = {};
+
+
+                    cout << "genial, agregaremos una banda al " + festival + " pero necesitamos su informacion\n"
+                    "Ingresa el nombre de la banda: ";
+                    cin>>nombre;
+                    cout<< "ingresa el id de la banda: .";
+                    cin>>id;
+                    cout<< "Cuantos musicos contiene la banda??";
+                    cin>>numIntegrantes;
+                    cout<< "ahora tenemos que agregar la información de los musicos";
+                    for (int i = 1;i<=numIntegrantes;i++) {
+                        cout<< "INFORMACION DEL MUSICO #"<<contAM<<endl;
+                        cout<< "Ingrese el Id: ";
+                        cin>>idMusico;
+                        cout<< "Ingrese el nombre: ";
+                        cin>>nombreMusico;
+                        cout<< "ingrese la edad del musico: ";
+                        cin>>edadMusico;
+                        cout<< "Ingrese los años de experiencia";
+                        cin>>añosExpMusico;
+                        cout<< "Ingrese el apodo del: ";
+                        cin>>apodoMusico;
+                        cout<< "instrumento musical: ";
+                        cin>>instrumento;
+                        musicians.push_back(new Musico(idMusico,nombreMusico,edadMusico,añosExpMusico,apodoMusico,instrumento) );
+                        cout<< "EL MUSICO #" << contAM << "FUE AGREGADO!"<<endl;
+                        contAM++;
+                    }
+                    cout<< "solo falta el genero de la banda: ";
+                    cin>>genero;
+                    agrupacionMusical *a1 = new banda(nombre,id,numIntegrantes,musicians,genero);
+                }
+                else if(opcAgrupacionMusical==2){
+                    int id = 0,numIntegrantes=0, contAM=1,edadMusico = 0,añosExpMusico = 0,idMusico=0;
+                    string nombre = "",nombreMusico,apodoMusico,instrumento,tipoOrquesta;
+                    vector <Musico*> musicians = {};
+
+                    cout << "genial, agregaremos una Orquesta al " + festival + " pero necesitamos su informacion\n"
+                                                                             "Ingresa el nombre de la orquesta: ";
+                    cin>>nombre;
+                    cout<< "ingresa el id de la orquesta: .";
+                    cin>>id;
+                    cout<< "Cuantos musicos contiene la orquesta??";
+                    cin>>numIntegrantes;
+                    cout<< "ahora tenemos que agregar la información de los musicos";
+                    for (int i = 1;i<=numIntegrantes;i++) {
+                        cout<< "INFORMACION DEL MUSICO #"<<contAM<<endl;
+                        cout<< "Ingrese el Id: ";
+                        cin>>idMusico;
+                        cout<< "Ingrese el nombre: ";
+                        cin>>nombreMusico;
+                        cout<< "ingrese la edad del musico: ";
+                        cin>>edadMusico;
+                        cout<< "Ingrese los años de experiencia";
+                        cin>>añosExpMusico;
+                        cout<< "Ingrese el apodo del: ";
+                        cin>>apodoMusico;
+                        cout<< "instrumento musical: ";
+                        cin>>instrumento;
+                        musicians.push_back(new Musico(idMusico,nombreMusico,edadMusico,añosExpMusico,apodoMusico,instrumento) );
+                        cout<< "EL MUSICO #" << contAM << "FUE AGREGADO!"<<endl;
+                        contAM++;
+                    }
+                        cout<< "ahora solo falta el tipo de orquesta: ";
+                        cin>>tipoOrquesta;
+                        agrupacionMusical *a1 = new orquesta(nombre,id,numIntegrantes,musicians,tipoOrquesta);
+                }
+                break;
+        }
+    }
 
 
 
-
-
-    /*
-    vector<Musico*> musicos={};
-    Musico *m1 = new Musico(1234, "CuloAcido", 69, 96, "Culito", "La polla");
-    Musico *m2 = new Musico(1234, "CuloSeco", 69, 96, "cola", " labios frios");
-    Musico *m3 = new Musico(1234, "La puñalada del bardo", 69, 96, "el dingli", "La polla");
-
-    musicos={
-            m1,m2,m3
-    };
-    banda losRecoditos = banda("los Recoditos de Monterrey", 2321, musicos.size(), musicos, "sex");
-    losRecoditos.print();
-     */
 }
