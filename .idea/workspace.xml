@@ -29,6 +29,9 @@
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Proyecto_final.exe" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Proyecto_final.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Testing/Temporary/LastTest.log" afterDir="false" />
     </list>
+    <list id="ea5262ad-7ded-49ed-9e6f-d051f5ef12ff" name="Changes by HOME" comment="" />
+    <list id="f8df1d18-8726-4e70-941a-598b8175140b" name="Changes by Luis Burgos Jaimes" comment="" />
+    <list id="e8f91cf9-79f6-44d6-ad0b-95b99a7358af" name="Changes by USUARIO" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -76,11 +79,6 @@
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -100,7 +98,12 @@
       <workItem from="1675908668981" duration="4490000" />
       <workItem from="1676058038461" duration="1034000" />
       <workItem from="1676076016553" duration="4527000" />
-      <workItem from="1676126006323" duration="9842000" />
+      <workItem from="1676126006323" duration="10192000" />
+      <workItem from="1676379993143" duration="8000" />
+      <workItem from="1676380131987" duration="468000" />
+      <workItem from="1676395306701" duration="1726000" />
+      <workItem from="1676419313414" duration="23961000" />
+      <workItem from="1676449545925" duration="59000" />
     </task>
     <servers />
   </component>

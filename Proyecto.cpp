@@ -5,9 +5,7 @@
 using namespace std;
 
 // Definimos las interfaces
-class ArtistaNacional
-{
-
+class ArtistaNacional{
 public:
     virtual string getAcento() = 0;
 };
@@ -62,6 +60,7 @@ public:
     virtual string TipoVehiculo() = 0;
 };
 // Cerramos Interfaces
+
 // Definimos las clases Abstractas
 class Persona
 {
@@ -262,10 +261,13 @@ public:
     }
 
     virtual string turno() = 0;
+
     bool login() override
     {
         return true;
     }
+
+    virtual void getTipoContrato() = 0;
 };
 
 class Lugar
@@ -407,6 +409,8 @@ public:
     // Definimos el metodo virtualmente puro
     virtual string Manilla() = 0;
 
+    virtual int getTipoBoleto() = 0;
+
     // Hacemos la encapsulacion
     int getidBoleto()
     {
@@ -426,8 +430,6 @@ public:
     {
         this->FechaValidez = FechaValidez;
     }
-
-
 
     void print()
     {
@@ -489,6 +491,32 @@ public:
 
 // Cierre de clases Abstractas
 // Inicio de Clases Concretas
+
+class Manager : public Persona
+{
+
+public:
+    
+    Manager() : Persona(){
+    }
+    Manager(int id, string nombre, int edad): Persona(id, nombre, edad)
+    {
+
+    }
+    int Salario() override {
+
+        return 0 ;
+    }
+    int getTipo() override{
+
+        return 0;
+    }
+    void representar(){
+        cout << "Representar es mi pasion, te sere de ayuda en tu camino como estrella"<<endl;
+    }
+
+};
+
 class Cantante : public Artista
 {
 protected:
@@ -537,28 +565,30 @@ public:
 class Dj : public Artista, public ArtistaNacional
 {
 protected:
+    string marcaMezclador;
     string ciudad;
 
 public:
     Dj() : Artista()
     {
+        marcaMezclador = "";
         ciudad = "";
     }
     int getTipo() override{
         return 4;
     }
-    Dj(int id, string nombre, int edad, int AñosExperiencia, string apodo, string ciudad) : Artista(id, nombre, edad, AñosExperiencia, apodo), ciudad(ciudad)
+    Dj(int id, string nombre, int edad, int AñosExperiencia, string apodo, string marcaMezclador) : Artista(id, nombre, edad, AñosExperiencia, apodo), marcaMezclador(marcaMezclador)
     {
     }
 
-    string getCiudad()
+    string getmarcaMezclador()
     {
-        return ciudad;
+        return marcaMezclador;
     }
 
-    void setCiudad(int ciudad)
+    void setmarcaMezclador(string marcaMezclador)
     {
-        this->ciudad = ciudad;
+        this->marcaMezclador = marcaMezclador;
     }
 
     int Salario() override
@@ -589,10 +619,19 @@ public:
     {
         return "";
     }
+
+    const string &getCiudad() const {
+        return ciudad;
+    }
+
+    void setCiudad(const string &ciudad) {
+        Dj::ciudad = ciudad;
+    }
 };
 class  Musico : public Artista
 {
 protected:
+    //Aca es instrumentoMusico:tipo(instrumento)
     string Instrumento;
 
 public:
@@ -717,16 +756,25 @@ public:
             cout<< "Años de experiencia: "<<music1->getAñosExperiencia()<<endl;
             cout<< "Apodo: "<<music1->getApodo()<<endl;
             cout<< "Instrumento que toca: "<<music1->getInstrumento()<<endl<<endl;
-
-
         }
     }
 
     friend ostream &operator<<(ostream &output, agrupacionMusical &m1)
     {
+        int cont = 0;
         output << "Nombre: " << m1.nombre << endl;
         output << "Id: " << m1.id << endl;
-        output << "Cantidad de integranges: " << m1.cantidadDeIntegrantes << endl;
+        output << "Cantidad de integrantes: " << m1.cantidadDeIntegrantes << endl;
+        cout<<"Información de los Musicos: \n"<<endl;
+        for(Musico* music1 :m1.Musicos){
+            cont+=1;
+            cout<<"Informacion Del Musico #"<<cont<<endl;
+            cout<<"Id: "<<music1->getId()<<endl;
+            cout<< "Nombre del musico: "<<m1.getNombre()<<endl;
+            cout<< "Edad: "<<music1->getEdad()<<endl;
+            cout<< "Años de experiencia: "<<music1->getAñosExperiencia()<<endl;
+            cout<< "Apodo: "<<music1->getApodo()<<endl;
+            cout<< "Instrumento que toca: "<<music1->getInstrumento()<<endl<<endl;}
         return output;
     }
 };
@@ -835,6 +883,10 @@ public:
         return valor;
     }
 
+    int getTipoBoleto() override{
+        return 1;
+    }
+
     void setValor(int valor)
     {
         this->valor = valor;
@@ -852,7 +904,7 @@ public:
         return output;
     }
 
-    string Manilla()
+    string Manilla()override
     {
         return "manilla roja";
     }
@@ -876,6 +928,10 @@ public:
         return valor;
     }
 
+    int getTipoBoleto()override{
+        return 3;
+    }
+
     void setValor(int valor)
     {
         this->valor = valor;
@@ -893,7 +949,7 @@ public:
         return output;
     }
 
-    string Manilla()
+    string Manilla()override
     {
         return "manilla roja";
     }
@@ -910,6 +966,10 @@ public:
     }
     BoletoMedia(int idBoletos, string FechaValidez, int valor) : Boletos(idBoletos, FechaValidez), valor(valor)
     {
+    }
+
+    int getTipoBoleto() override{
+        return 2;
     }
 
     int getValor()
@@ -934,7 +994,7 @@ public:
         return output;
     }
 
-    string Manilla()
+    string Manilla()override
     {
         return "manilla roja";
     }
@@ -1074,6 +1134,59 @@ public:
 
 };
 
+class VendedorTienda{
+protected:
+    int idTienda;
+    string nombre;
+    vector<producto*> productoInventario;
+public:
+    VendedorTienda(){
+        idTienda = 0;
+        nombre = "";
+        productoInventario = {};
+    }
+    VendedorTienda(int idTienda, string nombre, vector<producto*> productoInventario): idTienda(idTienda), nombre(nombre), productoInventario(productoInventario){}
+
+    int getIdTienda() const {
+        return idTienda;
+    }
+
+    void setIdTienda(int idTienda) {
+        VendedorTienda::idTienda = idTienda;
+    }
+
+    const string &getNombre() const {
+        return nombre;
+    }
+
+    void setNombre(const string &nombre) {
+        VendedorTienda::nombre = nombre;
+    }
+
+    const vector<producto *> &getProductoInventario() const {
+        return productoInventario;
+    }
+
+    void setProductoInventario(const vector<producto *> &productoInventario) {
+        VendedorTienda::productoInventario = productoInventario;
+    }
+
+    friend ostream& operator<<(ostream &out, VendedorTienda &v){
+        out << "Nombre: " << v.nombre << endl;
+        out << "Id de Tienda: " << v.idTienda << endl;
+        out << "Productos: " << endl;
+
+        int contador = 1;
+        for (producto* p : v.productoInventario ){
+            cout << "Producto " <<contador << ")"<< endl;
+            p->print();
+            contador++;
+        }
+    }
+
+    };
+
+
 class Seguridad : public Persona
 {
 protected:
@@ -1131,9 +1244,12 @@ public:
     }
 };
 
+class 
+
 class Patrocinador : public Persona
 {
 protected:
+    //
     string Empresa;
 
 public:
@@ -1406,27 +1522,73 @@ public:
     }
 };
 
+class Fecha{
+protected:
+    string dia, mes ,anio;
+public:
+    Fecha():dia(""), mes(""), anio(""){}
+    Fecha(string dia, string mes, string año): dia(dia), mes(mes), anio(anio){}
+
+    const string &getDia() const {
+        return dia;
+    }
+
+    void setDia(const string &dia) {
+        Fecha::dia = dia;
+    }
+
+    const string &getMes() const {
+        return mes;
+    }
+
+    void setMes(const string &mes) {
+        Fecha::mes = mes;
+    }
+
+    const string &getAnio() const {
+        return anio;
+    }
+
+    void setAnio(const string &anio) {
+        Fecha::anio = anio;
+    }
+    void print(){
+        cout << dia << "/" << mes << "/" << anio;
+    }
+    friend ostream& operator<< (ostream& out, Fecha fecha){
+        out << fecha.dia << "/" << fecha.mes << "/" << fecha.anio << endl;
+        return out;
+    }
+};
 class Evento : public Lugar, public Ubicacion, public Efectos
 {
 protected:
     string Titulo;
     int TiendasDisponibles;
+    vector <VendedorTienda*> vendedores;
+    Fecha fecha;
+
 
 public:
     Evento() : Lugar(), Ubicacion()
     {
         Titulo = "";
         TiendasDisponibles = 0;
+        vendedores = {};
+        fecha = Fecha();
     }
-    Evento(string NombreLugar, double CapacidadMinima, double CapacidadMaxima, string Direccion, string Ciudad, string Titulo, int TiendasDisponibles) : Lugar(NombreLugar, CapacidadMinima, CapacidadMaxima), Ubicacion(Direccion, Ciudad), Titulo(Titulo), TiendasDisponibles(TiendasDisponibles)
-    {
+    Evento(string NombreLugar, double CapacidadMinima, double CapacidadMaxima, string Direccion,
+           string Ciudad, string Titulo, int TiendasDisponibles, vector<VendedorTienda*> vendedores,string dia, string mes, string anio) :
+            Lugar(NombreLugar, CapacidadMinima, CapacidadMaxima), Ubicacion(Direccion, Ciudad), Titulo(Titulo),
+            TiendasDisponibles(TiendasDisponibles), vendedores(vendedores){
+        this->fecha = Fecha(dia,mes,anio);
     }
 
     string getTitulo()
     {
         return Titulo;
     }
-
+        //hola
     void setTitulo(string Titulo)
     {
         this->Titulo = Titulo;
@@ -1441,12 +1603,37 @@ public:
         this->TiendasDisponibles = TiendasDisponibles;
     }
 
+    vector<VendedorTienda*> getVendedores()
+    {
+        return vendedores;
+    }
+    void setVendedores(vector<VendedorTienda*> vendedores)
+    {
+        this->vendedores = vendedores;
+    }
+
+    Fecha getFecha(){
+        return fecha;
+    }
+    void setFecha(){
+        this->fecha = Fecha();
+    }
+
     void print()
     {
         Lugar::print();
         Ubicacion::print();
         cout << "Nombre del Evento: " << getTitulo() << endl;
         cout << "Cantidad de tiendas en evento: " << getTiendasDisponiblesTitulo() << endl;
+        cout << "Vendedores: " << endl;
+        int contador = 1;
+        for(VendedorTienda* v: vendedores)
+        {
+            cout << "Vendedor " << contador << endl;
+            cout << *v;
+            contador++;
+        }
+        cout << "Fecha: " << fecha;
     }
     friend ostream &operator<<(ostream &output, Evento &p)
     {
@@ -1454,16 +1641,16 @@ public:
         p.Ubicacion::print();
         output << "Nombre del Evento: " << p.getTitulo() << endl;
         output << "Cantidad de tiendas en evento: " << p.getTiendasDisponiblesTitulo() << endl;
-        return output;
-    }
-    string Example()
-    {
-        return "jeje";
-    }
+        int contador = 1;
+        for(VendedorTienda* v: p.vendedores)
+        {
+            output << "Vendedor " << contador << endl;
+            output << *v;
+            contador++;
+        }
+        output << "Fecha: " << p.fecha;
 
-    string gps()
-    {
-        return "flex";
+        return output;
     }
 
     bool ShowFuego() override
@@ -1522,27 +1709,82 @@ public:
     {
         return "";
     }
+
+    void getTipoContrato () override{
+        cout << "Contrato Logistico: Nomina Tiempo Completo" << endl;
+    }
 };
 
 class VendedorEntradas : public Empleado
 {
 protected:
+    vector<Boletos*> boleteria;
 public:
+    VendedorEntradas(): Empleado(), boleteria(0){}
+    VendedorEntradas(int id, string nombre, int edad, int idTrabajador, string Usuario, string Contraseña, vector<Boletos*> boleteria):
+                    Empleado(id, nombre, edad, idTrabajador, Usuario, Contraseña), boleteria(boleteria){}
+    vector<Boletos*> getBoleteria()
+    {
+        return boleteria;
+    }
+    void setBoleteria(vector<Boletos*>boleteria)
+    {
+        VendedorEntradas::boleteria = boleteria;
+    }
+    int getCatidadBoletos()
+    {
+        return boleteria.size();
+
+    }
+
     int getTipo() override{
     return 12;
-}
-};
-//falta espectador
+    }
+    void print()
+    {
+        Empleado::print();
+        int contador = 1;
+        cout << "Boletos: " << endl;
+        for(Boletos* b: boleteria)
+        {
+            cout << contador << ")";
+            if(b->getTipoBoleto()==1)
+            {
+                cout << "Boleto Normal";
+            }
+        }
 
-class Espectador : public Persona,Pago,MetodoPago
+    }
+};
+
+class Espectador : public Persona, public Pago, public MetodoPago
 {
 protected:
     string correo;
+    vector<Boletos*> boletos;
 public:
-    Espectador():Persona(){}
+    Espectador():Persona(), correo(""), boletos(0){}
+    Espectador(string nombre,int id, int edad,string correo, vector<Boletos*> boletos):
+                Persona(id,nombre,edad), correo(correo), boletos(boletos){}
 
-    Espectador(string nombre,int id, int edad,string correo):Persona(id,nombre,edad){}
+    string getCorreo(){
+        return correo;
+    }
 
+    void setCorreo(string correo)
+    {
+        Espectador::correo = correo;
+    }
+
+    vector<Boletos*> getBoletos()
+    {
+        return boletos;
+    }
+
+    void setBoletos(vector<Boletos*> boletos)
+    {
+        Espectador::boletos = boletos;
+    }
     int getTipo() override{
         return 13;
     }
@@ -1555,57 +1797,65 @@ public:
         return true;
     }
 
-    virtual bool Tarjeta() override{
+    bool Tarjeta() override{
         return true;}
-    virtual bool Efectivo(){
+
+    bool Efectivo(){
         return true;
     } 
-    virtual bool Nequi()override{
+    bool Nequi()override{
         return false;
     }
     
     void print(){
         Persona::print();
         cout<< "Correo: "<< this->correo;
+        cout << "Boletos: " << endl;
+        int contador = 1;
+        for(Boletos* b : boletos)
+        {
+            cout << contador << ") " << endl;
+            cout << *b;
+            contador++;
+        }
+
     }
 
     friend ostream &operator<<(ostream &output, Espectador &e1){
         e1.Persona::print();
-        output<<"Correo: "<<e1.correo;
+        output << "Correo: "<<e1.correo;
+        output << "Boletos: " <<endl;
+        int contador = 1;
+        for(Boletos* b : e1.boletos)
+        {
+            output << *b;
+        }
         return output;
     }
 };
 
+class Tarima{
+protected:
+    vector<Artista*> presentacionArtistas;
+    vector<agrupacionMusical*> presentacionAgrupacion;
+public:
+    Tarima(): presentacionArtistas(0), presentacionAgrupacion(0){}
+    Tarima(vector<Artista*> presentacionArtistas, vector<agrupacionMusical*> presentacionAgrupacion): presentacionArtistas(presentacionArtistas), presentacionAgrupacion(presentacionAgrupacion){}
+};
+
 int main()
-{
-    string festival = "",nombreLugar = "",direccion = "",ciudad = "",titulo = "";
-    double capacidadMinima = 0,capacidadMaxima = 0;
-    int opc = 0,TiendasDisponibles = 0;
-    cout<< "HOLAA!!, Aca planearemos nuestro festival"<<endl;
-    cout<< "Pero primero necesitamos un nombre para este"<<endl;
-    cout<< "por favor, ingresa el nombre del festival: ";
-    cin>>festival;
-    cout<< "\nAHORA PODREMOS DAR LA BIENVENIDA AL FESTIVAL "+festival<<endl;
-    cout<< "pero necesitamos hacer la preparación del evento\n\n";
-    cout<< "iniciaremos con las cosas indispensables"<<endl;
+{   vector<Artista*> listaArtista = {};
+    vector<agrupacionMusical*> listaAgrupacion = {};
+    vector<producto*> inventario = {};
+    vector<Empleado*> listaEmpleados = {};
+    vector<Marketing*> PersonalMarketing ={};
+    /*inventario.push_back(new comida("hamburguesa",2000,"macdonals",023042));
+    inventario.push_back(new bebida("cocacola",2000,"nose",20340));
+    VendedorTienda v1 = VendedorTienda(12345, "Juanito", inventario);
+    cout << v1;*/
 
-    cout<< "Para crear el evento necesitamos la siguiente informacion: "<<endl;
-    cout<< "Nombre del lugar donde se hara el "+festival<<": "<<endl;
-    cin>>nombreLugar;
-    cout<< "Capacidad minima: ";
-    cin>>capacidadMinima;
-    cout<< "Capacidad maxima: ";
-    cin>>capacidadMaxima;
-    cout<< "Direccion del evento: ";
-    cin>>direccion;
-    cout<< "Ciudad del evento: ";
-    cin>>ciudad;
-    cout<< "titulo o slogan: ";
-    cin>>titulo;
-    cout<< "Numero de tiendas disponibles";
-    cin>>TiendasDisponibles;
-    Evento ev = Evento(nombreLugar,capacidadMinima,capacidadMaxima,direccion,ciudad,titulo,TiendasDisponibles);
-
+    string festival = "";
+    int opc = 0;
     while(opc != 10){
         cout<<"1. Agregar una agrupacion musical\n"
               "2. crear Nuevo evento\n"
@@ -1619,8 +1869,8 @@ int main()
               "10. Agregar fuerza policial\n "
               "Ingrese una opción";
         cin>>opc;
-        switch (opc) {
-            case 1:
+
+            if(opc == 1){
                 int opcAgrupacionMusical = 0;
                 cout<< "1. Banda\n2.Orquesta\nIngrese una opcion: ";
                 cin>>opcAgrupacionMusical;
@@ -1697,8 +1947,187 @@ int main()
                         cin>>tipoOrquesta;
                         agrupacionMusical *a1 = new orquesta(nombre,id,numIntegrantes,musicians,tipoOrquesta);
                 }
-                break;
+
         }
+
+            else if(opc == 2){
+                //-------falta la composición------//
+
+
+                string nombreLugar = "",direccion = "",ciudad = "",titulo = "";
+                double capacidadMinima = 0,capacidadMaxima = 0;
+                int TiendasDisponibles = 0;
+                cout<< "HOLAA!!, Aca planearemos nuestro festival"<<endl;
+                cout<< "Pero primero necesitamos un nombre para este"<<endl;
+                cout<< "por favor, ingresa el nombre del festival: ";
+                cin>>festival;
+                cout<< "\nAHORA PODREMOS DAR LA BIENVENIDA AL FESTIVAL "+festival<<endl;
+                cout<< "pero necesitamos hacer la preparación del evento\n\n";
+                cout<< "iniciaremos con las cosas indispensables"<<endl;
+
+                cout<< "Para crear el evento necesitamos la siguiente informacion: "<<endl;
+                cout<< "Nombre del lugar donde se hara el "+festival<<": "<<endl;
+                cin>>nombreLugar;
+                cout<< "Capacidad minima: ";
+                cin>>capacidadMinima;
+                cout<< "Capacidad maxima: ";
+                cin>>capacidadMaxima;
+                cout<< "Direccion del evento: ";
+                cin>>direccion;
+                cout<< "Ciudad del evento: ";
+                cin>>ciudad;
+                cout<< "titulo o slogan: ";
+                cin>>titulo;
+                cout<< "Numero de tiendas disponibles";
+                cin>>TiendasDisponibles;
+                //Evento ev = Evento(nombreLugar,capacidadMinima,capacidadMaxima,direccion,ciudad,titulo,TiendasDisponibles);
+
+            }
+
+            else if(opc == 3){
+                string empresa = "",nombre = "";
+                int edad, id;
+                cout<< "Genial!!, conseguiste un patrocinador, pero ahora necesitamos su información";
+
+                cout<< "Ingresa la empresa del patrocinador: "<<endl;
+                cin>>empresa;
+                cout<< "Ingresa el nombre del patrocinador"<<endl;
+                cin>>nombre;
+                cout<< "Ingresa la edad: "<<endl;
+                cin>>edad;
+                cout<< "Ingrese el id: "<<endl;
+                cin>>id;
+                Patrocinador p1 = Patrocinador(id,nombre,edad,empresa);
+                
+                cout<< "Perfecto, se a agregado el patrocinador "<<p1.getnombre()<<endl;
+            }
+
+            else if(opc == 4){
+                int opcArtista = 0,id = 0,edad = 0,añosDeExperiencia = 0;
+                string instrumento="",genero="",nombre="",apodo="", marcaMezclador = "";
+                cout<< "Seleccione una de las siguientes opciones:  "<<endl;
+                cout<<  "1.Crear un musico \n2.Crear un Cantante\n 3. Crear un dj "<<endl;
+                cin>>opcArtista;
+                if(opcArtista == 1){
+                    cout<< "--------AGREGAR MUSICOS--------"<<endl;
+                    cout<< "Agregue el nombre del musico"<<endl;
+                    cin>>nombre;
+                    cout<< "Agregue el id: "<<endl;
+                    cin>>id;
+                    cout<< "Agregue la edad del musico: "<<endl;
+                    cin>>edad;
+                    cout<< "Agregue el apodo: "<<endl;
+                    cin>>apodo;
+                    cout<< "Agregue años de experiencia: "<<endl;
+                    cout<< añosDeExperiencia;
+                    cout<<"Agregue el nombre del instrumento: "<<endl;
+                    cin>>instrumento;
+
+                    listaArtista.push_back(new Musico(id,nombre,edad,añosDeExperiencia,apodo,instrumento));
+                    cout<< "Se ha agregado el musico! ;)"<<endl;
+                }
+                else if(opcArtista == 2){
+                    cout<< "--------AGREGAR CANTANTES--------"<<endl;
+                    cout<< "Agregue el nombre del cantante"<<endl;
+                    cin>>nombre;
+                    cout<< "Agregue el id: "<<endl;
+                    cin>>id;
+                    cout<< "Agregue la edad del cantante: "<<endl;
+                    cin>>edad;
+                    cout<< "Agregue el apodo: "<<endl;
+                    cin>>apodo;
+                    cout<< "Agregue años de experiencia: "<<endl;
+                    cout<< añosDeExperiencia;
+                    cout<<"Agregue el nombre del instrumento: "<<endl;
+                    cin>>genero;
+
+                    listaArtista.push_back(new Cantante(id,nombre,edad,genero,añosDeExperiencia,apodo));
+                    cout<< "Se ha agregado el cantante ;))"<<endl;
+                }
+                else if(opcArtista == 3) {
+                    cout << "--------AGREGAR DJ--------" << endl;
+                    cout << "Agregue el nombre del DJ" << endl;
+                    cin >> nombre;
+                    cout << "Agregue el id: " << endl;
+                    cin >> id;
+                    cout << "Agregue la edad del DJ: " << endl;
+                    cin >> edad;
+                    cout << "Agregue el apodo: " << endl;
+                    cin >> apodo;
+                    cout << "Agregue años de experiencia: " << endl;
+                    cin >> añosDeExperiencia;
+                    cout << "Agregue la marca del mezclador: " << endl;
+                    cin >> marcaMezclador;
+
+                    listaArtista.push_back(new Dj(id, nombre, edad, añosDeExperiencia, apodo, marcaMezclador));
+                    cout << "Se ha agregado el DJ ;))" << endl;
+                }
+            }
+
+            else if(opc == 5){
+                int id = 0, edad = 0,experiencia = 0;
+                string nombre = "";
+                cout << "--------AGREGAR UN PERSONAL DE MARKETING--------" << endl;
+
+                cout<< "Agregue el nombre del musico"<<endl;
+                cin>>nombre;
+                cout<< "Agregue el id: "<<endl;
+                cin>>id;
+                cout<< "Agregue la edad del musico: "<<endl;
+                cin>>edad;
+                cout<< "ingrese Años de experiencia"<<endl;
+                cin>>experiencia;
+
+                PersonalMarketing.push_back(new Marketing(id,nombre,edad,experiencia));
+                cout<< "Personal de marketing creado ;))";
+            }
+
+            else if(opc == 6){
+                string nombre = "", usuario = "", contraseña = "";
+                int id = 0, edad = 0, idTrabajador = 0, opcEmpleado = 0;
+                cout << "--------AGREGAR UN EMPLEADO--------" << endl<<endl;
+                cout << "Seleccione una de las siguientes opciones:" << endl;
+                cout << "1. Crear empleado logistico \n2. Crear Vendedor de entrada"<<endl;
+                cin >> opcEmpleado;
+                if (opcEmpleado == 1){
+                    cout << "--------AGREGAR UN EMPLEADO LOGISTICO--------" << endl;
+                    cout << "ingresa la identificacion del empleado: "<<endl;
+                    cin >> id;
+                    cout << "Agrega el nombre del empleado: "<<endl;
+                    cin >> nombre;
+                    cout <<"Escribe la edad del empleado"<<endl;
+                    cin >> edad;
+                    cout << "Agrega el ID del empleado: "<<endl;
+                    cin >> idTrabajador;
+                    cout << "Agrega el nombre de usuario para el empleado: "<<endl;
+                    cin >> usuario;
+                    cout << "Escribe la contraseña del empleado: " <<endl;
+                    cin >> contraseña;
+
+
+                }
+                else if(opcEmpleado == 2){
+                    cout << "--------AGREGAR UN VENDEDOR DE ENTRADAS--------" << endl;
+                    cout << "ingresa la identificacion del vendedor de entradas: "<<endl;
+                    cin >> id;
+                    cout << "Agrega el nombre del vendedor de entradas: "<<endl;
+                    cin >> nombre;
+                    cout <<"Escribe la edad del vendedor de entradas"<<endl;
+                    cin >> edad;
+                    cout << "Agrega el ID del vendedor de entradas: "<<endl;
+                    cin >> idTrabajador;
+                    cout << "Agrega el nombre de usuario para el vendedor de entradas: "<<endl;
+                    cin >> usuario;
+                    cout << "Escribe la contraseña del vendedor de entradas: " <<endl;
+                    cin >> contraseña;
+                   /* cout << "Escribe la contraseña del vendedor de entradas: " <<endl;
+                    cin >> contraseña;
+                    cout << "Escribe la contraseña del vendedor de entradas: " <<endl;
+                    cin >> contraseña;*/
+
+                    //listaEmpleados.push_back(new VendedorEntradas(id, nombre, edad, idTrabajador, usuario, contraseña, boleteria, cantidadBoletos ))
+                }
+            }
     }
 
 
