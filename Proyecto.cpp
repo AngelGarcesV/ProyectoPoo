@@ -654,7 +654,7 @@ public:
     }
     string Presentarse() override
     {
-        return "";
+        return "(sonidos de )";
     }
 
     const string &getCiudad() const {
@@ -1885,8 +1885,8 @@ int main()
     vector<Boletos*> boleterias = {};
     vector<Patrocinador*> patro = {};
     vector<Espectador*> especta = {};
-//vector de policia
-//vector de seguridad
+    vector<Seguridad*> seguridad = {};
+    vector<Policia*> policias = {};
 
 
 
@@ -1894,7 +1894,7 @@ int main()
 
     string festival = "";
     int opc = 0;
-    while(opc != 10){
+    while(opc != 14){
         cout<<"1. Agregar una agrupacion musical\n"
               "2. crear Nuevo evento\n"
               "3. Agregar un patrocinador.\n"
@@ -1904,7 +1904,7 @@ int main()
               "7. Agregar un espectador\n"
               "8. Agregar seguridad al evento\n"
               "9. Espectaculo\n "
-              "10.Salir"
+              "10.Mostrar info de artistas"
               "Ingrese una opción";
         cin>>opc;
 
@@ -2087,21 +2087,23 @@ int main()
                     cout<< "Se ha agregado el cantante ;))"<<endl;
                 }
                 else if(opcArtista == 3) {
-                    cout << "--------AGREGAR UN PATROCINADOR--------" << endl;
-                    string nombre= "",nombreEmpresa = "";
-                    int id = 0, edad = 0,añoDeCreacion = 0;
+                    cout << "--------AGREGAR UN DJ--------" << endl;
+                    string nombre= "",apodo = "", marcaMezclador = "";
+                    int id = 0,  edad = 0,añosExperiencia = 0;
                     cout<< "Ingrese el nombre del patrocinador"<<endl;
                     cin>>nombre;
                     cout<<"Ingrese el id: "<<endl;
                     cin>>id;
                     cout<< "Ingrese la edad del patrocinador"<<endl;
                     cin>>edad;
-                    cout<< "Ingrese el nombre de la empresa del patrocinador: "<<endl;
-                    cin>>nombreEmpresa;
+                    cout<< "Ingrese el apodo del DJ: "<<endl;
+                    cin>>apodo;
                     cout<< "Ingrese el año de creacion de la empresa: "<<endl;
                     cin>>añoDeCreacion;
+                    cout << "Ingrese la marca de mezclador que usa el DJ: "<<endl;
+                    cin >> marcaMezclador;
 
-                    patro.push_back(new Patrocinador(id,nombre,edad,nombreEmpresa,añoDeCreacion));
+                    listaArtista.push_back(new Dj(id,nombre,edad,nombreEmpresa,añoDeCreacion, marcaMezclador));
                     cout<< "el patrocinador ha sido agregado";
                 }
             }
@@ -2237,15 +2239,18 @@ int main()
                 cin >> edad;
                 cout << "Ingrese el correo del espectador: "<<endl;
                 cin >> correo;
-                cout << ""
-                especta.push_back(new Espectador(nombre,id, edad, correo,))
+                cout << "";
+                //especta.push_back(new Espectador(nombre,id, edad, correo,))
 
 
 
             }
             else if(opc == 8){
-                string nombre = "";
-                int id = 0, edad = 0, opcSeguridad = 0;
+               int  opcSeguridad = 0;
+                string turno ="", nombre = "",
+                rango = "", cuadrante ="";
+                int id = 0, edad = 0;
+                bool experiencia;
 
                 cout << "--------AGREGAR SEGURIDAD AL EVENTO--------" << endl<<endl;
                 cout << "Ahora seleccionaremos a los que se encargaran de la seguridad del evento"<< endl;
@@ -2254,24 +2259,70 @@ int main()
                 cin >> opcSeguridad;
 
                 if (opcSeguridad == 1){
+
                     int nSeguridad;
                     cout << "Cuantos hombres de seguridad quiere agregar? " << endl;
                     cin >> nSeguridad;
-                    for(int i = 1; i<=nSeguridad, i++)
+                    for(int i = 1; i<=nSeguridad; i++)
                     {
                         cout << "--------SEGURIDAD--------" << endl<<endl;
                         cout << "Seguridad (" << i << ")" << endl;
                         cout << "Ingresa el nombre: "<<endl;
                         cin >> nombre;
-                        cout >>
+                        cout << "Identificacion: " << endl;
+                        cin >> id;
+                        cout << "Edad: " << endl;
+                        cin >> edad;
+                        cout << "Tiene experiencia?\n1)Si\n0)No" << endl;
+                        cin >> experiencia;
+                        cout << "Turno (Noche o dia): " <<endl;
+                        cin >> turno;
+                        Seguridad* sg = new Seguridad(id, nombre, edad, experiencia, turno);
+                        cout << "Guardado con exito ";
                     }
                 }
                 else if(opcSeguridad == 2){
-                    cout << "";
+                    int nPolicias = 0;
+                    cout << "--------FUERZA POLICIAL--------";
+                    cout << "Rango: " << endl;
+                    cin >> rango;
+                    cout << "Cuadrante: "  << endl;
+                    cin >> cuadrante;
+                    cout << "Cuantos policias quiere agregar? : " <<endl;
+                    cin >> nPolicias;
+                    for (int i=0; i <= nPolicias; i++)
+                    {
+                        cout << "Policia #" << i << ": " << endl;
+                        cout << "Nombre: " << endl;
+                        cin >> nombre;
+                        cout << "Documento d "
+                    }
                 }
             }
             else if(opc == 9){
-                
+               Tarima t1 = Tarima(listaArtista,listaAgrupacion);
+               cout<< "Ahora empezaremos con las actuaciones de nuestro talentosos artistas y grupos musicales"<<endl;
+                int cont = 1;
+               for(Artista *a1: listaArtista){
+                   cout<< "A la taria se subira el artista numero#"<<cont<<endl;
+                   a1->Presentarse();
+                   cont++;
+               }
+               cout<< "Con ustedes, al escenario se subiran las agrupaciones"<<endl;
+               cont = 1;
+                for (agrupacionMusical *ag1:listaAgrupacion) {
+                    cout<< "Ahora se presentara la agrupacion #"<<cont<<endl;
+                    ag1->tocar();
+                    cont++;
+                }
+
+            }
+            else if(opc == 10){
+                int cont = 1;
+                cout << "--------MOSTRAR LISTADO DE ARTISTAS--------" << endl<<endl;
+                for(Artista *a1:listaArtista){
+                    cout<< *a1<<endl;
+                }
             }
 
     }
