@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-
+#include <cmath>
 
 using namespace std;
 
@@ -267,7 +267,7 @@ public:
         return true;
     }
 
-    virtual void getTipoContrato() = 0;
+    virtual string getTipoContrato() = 0;
 };
 
 class Lugar
@@ -391,21 +391,58 @@ public:
     }
 };
 
+class Fecha{
+protected:
+    string dia, mes ,anio;
+public:
+    Fecha():dia(""), mes(""), anio(""){}
+    Fecha(string dia, string mes, string año): dia(dia), mes(mes), anio(año){}
+
+    const string &getDia() const {
+        return dia;
+    }
+
+    void setDia(const string &dia) {
+        Fecha::dia = dia;
+    }
+
+    const string &getMes() const {
+        return mes;
+    }
+
+    void setMes(const string &mes) {
+        Fecha::mes = mes;
+    }
+
+    const string &getAnio() const {
+        return anio;
+    }
+
+    void setAnio(const string &anio) {
+        Fecha::anio = anio;
+    }
+    void print(){
+        cout << dia << "/" << mes << "/" << anio;
+    }
+    friend ostream& operator<< (ostream& out, Fecha fecha){
+        out << fecha.dia << "/" << fecha.mes << "/" << fecha.anio << endl;
+        return out;
+    }
+};
+
 class Boletos
 {
 protected:
     int idBoleto;
-    string FechaValidez;
+    Fecha fechaValidez;
 
 public:
-    Boletos()
-    {
+    Boletos(){
+
         idBoleto = 0;
-        FechaValidez = "";
+        fechaValidez = Fecha();
     }
-    Boletos(int idBoleto, string FechaValidez) : idBoleto(idBoleto), FechaValidez(FechaValidez)
-    {
-    }
+    Boletos(int idBoleto, string dia, string mes, string anio) : idBoleto(idBoleto), fechaValidez(Fecha(dia, mes, anio)){}
     // Definimos el metodo virtualmente puro
     virtual string Manilla() = 0;
 
@@ -421,14 +458,14 @@ public:
     {
         this->idBoleto = idBoleto;
     }
-    string getFechaValidez()
+    Fecha getFechaValidez()
     {
-        return FechaValidez;
+        return fechaValidez;
     }
 
-    void setFechaValidez(string FechaValidez)
+    void setFechaValidez(Fecha FechaValidez)
     {
-        this->FechaValidez = FechaValidez;
+        this->fechaValidez = FechaValidez;
     }
 
     void print()
@@ -866,41 +903,17 @@ public:
 
 class BoletoNormal : public Boletos
 {
-protected:
-    int valor;
-
 public:
-    BoletoNormal() : Boletos()
-    {
-        valor = 0;
-    }
-    BoletoNormal(int idBoletos, string FechaValidez, int valor) : Boletos(idBoletos, FechaValidez), valor(valor)
-    {
-    }
+    BoletoNormal() : Boletos(){}
+    BoletoNormal(int idBoletos, string dia, string mes, string anio) : Boletos(idBoletos, dia, mes, anio){}
 
-    int getValor()
-    {
-        return valor;
-    }
 
     int getTipoBoleto() override{
         return 1;
     }
-
-    void setValor(int valor)
-    {
-        this->valor = valor;
-    }
-    void print()
-    {
-        Boletos::print();
-        cout << "el valor del boleto de media es : " << getValor() << endl;
-    }
     friend ostream &operator<<(ostream &output, BoletoNormal &p)
     {
         p.Boletos::print();
-
-        output << "el valor del boleto de media es : " << p.getValor() << endl;
         return output;
     }
 
@@ -909,62 +922,18 @@ public:
         return "manilla roja";
     }
 };
-class BoletoVip : public Boletos
-{
-protected:
-    int valor;
 
-public:
-    BoletoVip() : Boletos()
-    {
-        valor = 0;
-    }
-    BoletoVip(int idBoletos, string FechaValidez, int valor) : Boletos(idBoletos, FechaValidez), valor(valor)
-    {
-    }
 
-    int getValor()
-    {
-        return valor;
-    }
-
-    int getTipoBoleto()override{
-        return 3;
-    }
-
-    void setValor(int valor)
-    {
-        this->valor = valor;
-    }
-    void print()
-    {
-        Boletos::print();
-        cout << "el valor del boleto de media es : " << getValor() << endl;
-    }
-    friend ostream &operator<<(ostream &output, BoletoVip &p)
-    {
-        p.Boletos::print();
-
-        output << "el valor del boleto de media es : " << p.getValor() << endl;
-        return output;
-    }
-
-    string Manilla()override
-    {
-        return "manilla roja";
-    }
-};
 class BoletoMedia : public Boletos
 {
 protected:
-    int valor;
-
+    string merchandising;
 public:
     BoletoMedia() : Boletos()
     {
-        valor = 0;
+
     }
-    BoletoMedia(int idBoletos, string FechaValidez, int valor) : Boletos(idBoletos, FechaValidez), valor(valor)
+    BoletoMedia(int idBoletos, string dia,string mes, string año,string merchandising) : Boletos(idBoletos, dia,mes,año),merchandising(merchandising)
     {
     }
 
@@ -972,25 +941,52 @@ public:
         return 2;
     }
 
-    int getValor()
-    {
-        return valor;
-    }
 
-    void setValor(int valor)
-    {
-        this->valor = valor;
-    }
-    void print()
-    {
-        Boletos::print();
-        cout << "el valor del boleto de media es : " << getValor() << endl;
-    }
     friend ostream &operator<<(ostream &output, BoletoMedia &p)
     {
         p.Boletos::print();
+        return output;
+    }
 
-        output << "el valor del boleto de media es : " << p.getValor() << endl;
+    string Manilla()override
+    {
+        return "manilla roja";
+    }
+
+    const string &getMerchandising() const {
+        return merchandising;
+    }
+
+    void setMerchandising(const string &merchandising) {
+        BoletoMedia::merchandising = merchandising;
+    }
+};
+class BoletoVip : public Boletos
+{
+protected:
+    string merchandising = "";
+    bool backStage = true;
+
+public:
+    BoletoVip() : Boletos()
+    {
+
+    }
+    BoletoVip(int idBoletos, string dia, string mes, string anio, string merchandising, bool backStage) : Boletos(idBoletos, dia, mes, anio), merchandising(merchandising), backStage(backStage)
+    {
+    }
+
+    int getTipoBoleto()override{
+        return 3;
+    }
+
+    friend ostream &operator<<(ostream &output, BoletoVip &p)
+    {
+        p.Boletos::print();
+        output<<p.merchandising<<endl;
+        if(p.backStage == true){
+            output<<"Puede entrar al backStage";
+        }
         return output;
     }
 
@@ -999,6 +995,21 @@ public:
         return "manilla roja";
     }
 };
+
+class VIP{
+protected:
+    BoletoVip boletoVIP;
+public:
+    BoletoVip getBoletoVIP()
+    {
+        return boletoVIP;
+    }
+    void setBoletoVIP(int idBoleto, string dia, string mes, string anio, string merchandising, bool backstage)
+    {
+        boletoVIP = BoletoVip(idBoleto, dia, mes, anio, merchandising,backstage);
+    }
+};
+
 
 class producto : public Distribuidora
 {
@@ -1097,6 +1108,7 @@ public:
     friend ostream &operator<<(ostream &output, comida &c1){
         c1.producto::print();
         output<<"Calorias: "<<c1.calorias<<endl;
+        return output;
     }
 
 };
@@ -1182,6 +1194,7 @@ public:
             p->print();
             contador++;
         }
+        return out;
     }
 
     };
@@ -1244,34 +1257,50 @@ public:
     }
 };
 
-class 
+class Empresa{
+protected:
+    string nombre;
+    int anioDeCreacion;
+public:
+    Empresa(){
+        nombre = "";
+        anioDeCreacion = 0;
+    }
+    Empresa(string nombre, int anioDeCreacion): nombre(nombre), anioDeCreacion(anioDeCreacion){}
+
+    string getNombre()
+    {
+        return nombre;
+    }
+
+    void setNombre(string nombre)
+    {
+        this->nombre = nombre;
+    }
+    int getAnioDeCreacion()
+    {
+        return anioDeCreacion;
+    }
+
+    void setAnioDeCreacion(int anioDeCreacion)
+    {
+        this->anioDeCreacion = anioDeCreacion;
+    }
+};
 
 class Patrocinador : public Persona
 {
 protected:
     //
-    string Empresa;
+    Empresa empresaPatrocinadora;
 
 public:
-    Patrocinador() : Persona()
-    {
-        Empresa = "";
-    }
+    Patrocinador() : Persona(){this->empresaPatrocinadora = Empresa();}
     int getTipo() override{
         return 7;
     }
-    Patrocinador(int id, string nombre, int edad, string Empresa) : Persona(id, nombre, edad), Empresa(Empresa)
-    {
-    }
-
-    string getEmpresa()
-    {
-        return Empresa;
-    }
-
-    void setEmpresa(string Empresa)
-    {
-        this->Empresa = Empresa;
+    Patrocinador(int id, string nombre, int edad, string NombreEmpresa, int añoDeCracion) : Persona(id, nombre, edad)
+    {this->empresaPatrocinadora = Empresa(NombreEmpresa,añoDeCracion);
     }
 
     int Salario() override
@@ -1282,14 +1311,24 @@ public:
     {
         Persona::print();
 
-        cout << "Empresa: " << getEmpresa() << endl;
+        cout << "Empresa: " << empresaPatrocinadora.getNombre() << endl;
+        cout<< empresaPatrocinadora.getAnioDeCreacion();
     }
     friend ostream &operator<<(ostream &output, Patrocinador &p)
     {
         p.Persona::print();
 
-        output << "Empresa: " << p.getEmpresa() << endl;
+        output << "Empresa: " << p.empresaPatrocinadora.getNombre() << endl;
+        output<<p.empresaPatrocinadora.getAnioDeCreacion()<<endl;
         return output;
+    }
+
+    const Empresa &getEmpresaPatrocinadora() const {
+        return empresaPatrocinadora;
+    }
+
+    void setEmpresaPatrocinadora(const Empresa &empresaPatrocinadora) {
+        Patrocinador::empresaPatrocinadora = empresaPatrocinadora;
     }
 };
 
@@ -1397,7 +1436,7 @@ public:
         s.Persona::print();
         output << s.experienciaPelea << endl;
         output << s.turno << endl;
-
+        return output;
     }
 
 };
@@ -1522,44 +1561,6 @@ public:
     }
 };
 
-class Fecha{
-protected:
-    string dia, mes ,anio;
-public:
-    Fecha():dia(""), mes(""), anio(""){}
-    Fecha(string dia, string mes, string año): dia(dia), mes(mes), anio(anio){}
-
-    const string &getDia() const {
-        return dia;
-    }
-
-    void setDia(const string &dia) {
-        Fecha::dia = dia;
-    }
-
-    const string &getMes() const {
-        return mes;
-    }
-
-    void setMes(const string &mes) {
-        Fecha::mes = mes;
-    }
-
-    const string &getAnio() const {
-        return anio;
-    }
-
-    void setAnio(const string &anio) {
-        Fecha::anio = anio;
-    }
-    void print(){
-        cout << dia << "/" << mes << "/" << anio;
-    }
-    friend ostream& operator<< (ostream& out, Fecha fecha){
-        out << fecha.dia << "/" << fecha.mes << "/" << fecha.anio << endl;
-        return out;
-    }
-};
 class Evento : public Lugar, public Ubicacion, public Efectos
 {
 protected:
@@ -1588,7 +1589,7 @@ public:
     {
         return Titulo;
     }
-        //hola
+
     void setTitulo(string Titulo)
     {
         this->Titulo = Titulo;
@@ -1707,11 +1708,11 @@ public:
     }
     string turno() override
     {
-        return "";
+        return "Diario";
     }
 
-    void getTipoContrato () override{
-        cout << "Contrato Logistico: Nomina Tiempo Completo" << endl;
+    string getTipoContrato () override{
+         return "Contrato Logistico: Nomina Tiempo Completo";
     }
 };
 
@@ -1720,7 +1721,9 @@ class VendedorEntradas : public Empleado
 protected:
     vector<Boletos*> boleteria;
 public:
-    VendedorEntradas(): Empleado(), boleteria(0){}
+    VendedorEntradas(): Empleado(){
+        this->boleteria = {};
+    }
     VendedorEntradas(int id, string nombre, int edad, int idTrabajador, string Usuario, string Contraseña, vector<Boletos*> boleteria):
                     Empleado(id, nombre, edad, idTrabajador, Usuario, Contraseña), boleteria(boleteria){}
     vector<Boletos*> getBoleteria()
@@ -1731,31 +1734,60 @@ public:
     {
         VendedorEntradas::boleteria = boleteria;
     }
-    int getCatidadBoletos()
-    {
-        return boleteria.size();
-
-    }
 
     int getTipo() override{
     return 12;
     }
+    
+    string getTipoContrato()override
+    {
+        return "Contrato por nomina\n";
+    }
+
+    string turno()override
+    {
+        return "Diario\n";
+    }
     void print()
     {
         Empleado::print();
+        cout << getTipoContrato() << endl;
         int contador = 1;
-        cout << "Boletos: " << endl;
+        string tipo;
         for(Boletos* b: boleteria)
         {
-            cout << contador << ")";
+            b->print();
+        }
+    }
+    friend ostream& operator <<(ostream& output, VendedorEntradas vE)
+    {
+        vE.Empleado::print();
+        output << vE.getTipoContrato() << endl;
+        int contador = 1;
+        string tipo;
+        cout << "Boletos: " << endl;
+        for(Boletos* b: vE.boleteria)
+        {
+            output << contador << ")";
             if(b->getTipoBoleto()==1)
             {
-                cout << "Boleto Normal";
+                tipo = "Normal";
             }
+            else if(b->getTipoBoleto()==2)
+            {
+                tipo = "Medio";
+            }
+            else
+            {
+                tipo = "VIP";
+            }
+            output << "Boleto " << tipo << endl;
+            output << *b << endl;
         }
-
+        return output;
     }
-};
+
+    };
 
 class Espectador : public Persona, public Pago, public MetodoPago
 {
@@ -1849,10 +1881,16 @@ int main()
     vector<producto*> inventario = {};
     vector<Empleado*> listaEmpleados = {};
     vector<Marketing*> PersonalMarketing ={};
-    /*inventario.push_back(new comida("hamburguesa",2000,"macdonals",023042));
-    inventario.push_back(new bebida("cocacola",2000,"nose",20340));
-    VendedorTienda v1 = VendedorTienda(12345, "Juanito", inventario);
-    cout << v1;*/
+    vector <Musico*> musicians = {};
+    vector<Boletos*> boleterias = {};
+    vector<Patrocinador*> patro = {};
+    vector<Espectador*> especta = {};
+//vector de policia
+//vector de seguridad
+
+
+
+
 
     string festival = "";
     int opc = 0;
@@ -1863,10 +1901,10 @@ int main()
               "4. Agregar un Artista\n"
               "5. Agregar Personal de Marketing\n"
               "6. Agregar un Empleado\n"
-              "7. Agregar un patrocinador\n"
-              "8. Agregar un espectador\n"
-              "9. Agregar seguridad al evento\n"
-              "10. Agregar fuerza policial\n "
+              "7. Agregar un espectador\n"
+              "8. Agregar seguridad al evento\n"
+              "9. Espectaculo\n "
+              "10.Salir"
               "Ingrese una opción";
         cin>>opc;
 
@@ -1879,7 +1917,7 @@ int main()
                 if(opcAgrupacionMusical == 1) {
                     int id = 0,numIntegrantes=0, contAM=1,edadMusico = 0,añosExpMusico = 0,idMusico=0;
                     string nombre = "",nombreMusico,apodoMusico,instrumento,genero;
-                    vector <Musico*> musicians = {};
+
 
 
                     cout << "genial, agregaremos una banda al " + festival + " pero necesitamos su informacion\n"
@@ -1985,19 +2023,23 @@ int main()
             }
 
             else if(opc == 3){
-                string empresa = "",nombre = "";
+                string nombreEmpresa = "",nombre = "";
+                int añoDeCreacion = 0;
                 int edad, id;
-                cout<< "Genial!!, conseguiste un patrocinador, pero ahora necesitamos su información";
-
-                cout<< "Ingresa la empresa del patrocinador: "<<endl;
-                cin>>empresa;
+                cout<< "Genial!!, conseguiste un patrocinador, pero ahora necesitamos su información"<<endl;
+                
                 cout<< "Ingresa el nombre del patrocinador"<<endl;
                 cin>>nombre;
                 cout<< "Ingresa la edad: "<<endl;
                 cin>>edad;
                 cout<< "Ingrese el id: "<<endl;
                 cin>>id;
-                Patrocinador p1 = Patrocinador(id,nombre,edad,empresa);
+                cout<< "Nombre de la empresa a la que pertenece: "<<endl;
+                cin>>nombreEmpresa;
+                cout<< "Año de creacion de la empresa";
+                cin>>añoDeCreacion;
+                
+                Patrocinador p1 = Patrocinador(id,nombre,edad,nombreEmpresa,añoDeCreacion);
                 
                 cout<< "Perfecto, se a agregado el patrocinador "<<p1.getnombre()<<endl;
             }
@@ -2019,7 +2061,7 @@ int main()
                     cout<< "Agregue el apodo: "<<endl;
                     cin>>apodo;
                     cout<< "Agregue años de experiencia: "<<endl;
-                    cout<< añosDeExperiencia;
+                    cin>> añosDeExperiencia;
                     cout<<"Agregue el nombre del instrumento: "<<endl;
                     cin>>instrumento;
 
@@ -2037,7 +2079,7 @@ int main()
                     cout<< "Agregue el apodo: "<<endl;
                     cin>>apodo;
                     cout<< "Agregue años de experiencia: "<<endl;
-                    cout<< añosDeExperiencia;
+                    cin>> añosDeExperiencia;
                     cout<<"Agregue el nombre del instrumento: "<<endl;
                     cin>>genero;
 
@@ -2045,22 +2087,22 @@ int main()
                     cout<< "Se ha agregado el cantante ;))"<<endl;
                 }
                 else if(opcArtista == 3) {
-                    cout << "--------AGREGAR DJ--------" << endl;
-                    cout << "Agregue el nombre del DJ" << endl;
-                    cin >> nombre;
-                    cout << "Agregue el id: " << endl;
-                    cin >> id;
-                    cout << "Agregue la edad del DJ: " << endl;
-                    cin >> edad;
-                    cout << "Agregue el apodo: " << endl;
-                    cin >> apodo;
-                    cout << "Agregue años de experiencia: " << endl;
-                    cin >> añosDeExperiencia;
-                    cout << "Agregue la marca del mezclador: " << endl;
-                    cin >> marcaMezclador;
+                    cout << "--------AGREGAR UN PATROCINADOR--------" << endl;
+                    string nombre= "",nombreEmpresa = "";
+                    int id = 0, edad = 0,añoDeCreacion = 0;
+                    cout<< "Ingrese el nombre del patrocinador"<<endl;
+                    cin>>nombre;
+                    cout<<"Ingrese el id: "<<endl;
+                    cin>>id;
+                    cout<< "Ingrese la edad del patrocinador"<<endl;
+                    cin>>edad;
+                    cout<< "Ingrese el nombre de la empresa del patrocinador: "<<endl;
+                    cin>>nombreEmpresa;
+                    cout<< "Ingrese el año de creacion de la empresa: "<<endl;
+                    cin>>añoDeCreacion;
 
-                    listaArtista.push_back(new Dj(id, nombre, edad, añosDeExperiencia, apodo, marcaMezclador));
-                    cout << "Se ha agregado el DJ ;))" << endl;
+                    patro.push_back(new Patrocinador(id,nombre,edad,nombreEmpresa,añoDeCreacion));
+                    cout<< "el patrocinador ha sido agregado";
                 }
             }
 
@@ -2084,7 +2126,7 @@ int main()
 
             else if(opc == 6){
                 string nombre = "", usuario = "", contraseña = "";
-                int id = 0, edad = 0, idTrabajador = 0, opcEmpleado = 0;
+                int id = 0, edad = 0, idTrabajador = 0, opcEmpleado = 0, opcVendedor = 0;
                 cout << "--------AGREGAR UN EMPLEADO--------" << endl<<endl;
                 cout << "Seleccione una de las siguientes opciones:" << endl;
                 cout << "1. Crear empleado logistico \n2. Crear Vendedor de entrada"<<endl;
@@ -2107,6 +2149,7 @@ int main()
 
                 }
                 else if(opcEmpleado == 2){
+                    int itBoleto = 0;
                     cout << "--------AGREGAR UN VENDEDOR DE ENTRADAS--------" << endl;
                     cout << "ingresa la identificacion del vendedor de entradas: "<<endl;
                     cin >> id;
@@ -2120,16 +2163,119 @@ int main()
                     cin >> usuario;
                     cout << "Escribe la contraseña del vendedor de entradas: " <<endl;
                     cin >> contraseña;
-                   /* cout << "Escribe la contraseña del vendedor de entradas: " <<endl;
-                    cin >> contraseña;
-                    cout << "Escribe la contraseña del vendedor de entradas: " <<endl;
-                    cin >> contraseña;*/
+                    cout<< "cuantos boletos tiene el vendedor?"<<endl;
+                    for(int i = 0; i <= itBoleto;i++){
+                        cout << "Seleccione una de las siguientes opciones:" << endl;
+                        cout<<"1. Boleto normal\n2.Boleto media\n3. Boleto vip"<<endl;
+                        cin >> opcVendedor;
+                        if(opcVendedor == 1){
+                            int idBoleto = 0, valor = 0;
+                            string dia = "", mes, anio;
+                            cout<< "ingrese el id del boleto"<<endl;
+                            cin >> idBoleto;
+                            cout << "Ingrese el dia de la fecha de caducidad del boleto: "<<endl;
+                            cin>>dia;
+                            cout<< "Ingrese el mes de la fecha de caducidad del boleto: "<<endl;
+                            cin>>mes;
+                            cout<< "Ingrese el año de la fecha de caducidad del boleto: "<<endl;
+                            cin>>anio;
+                            cout << "Ingresa el valor del boleto: "<<endl;
+                            cin >> valor;
+                            boleterias.push_back(new BoletoNormal(id,dia,mes,anio));
 
-                    //listaEmpleados.push_back(new VendedorEntradas(id, nombre, edad, idTrabajador, usuario, contraseña, boleteria, cantidadBoletos ))
+                        }else if(opcVendedor == 2){
+                            int idBoleto = 0, valor = 0;
+                            string dia = "", mes, anio,merchandising;
+                            cout<< "ingrese el id del boleto"<<endl;
+                            cin >> idBoleto;
+                            cout << "Ingrese el dia de la fecha de caducidad del boleto: "<<endl;
+                            cin>>dia;
+                            cout<< "Ingrese el mes de la fecha de caducidad del boleto: "<<endl;
+                            cin>>mes;
+                            cout<< "Ingrese el año de la fecha de caducidad del boleto: "<<endl;
+                            cin>>anio;
+                            cout << "Que merchandising recibe?: "<<endl;
+                            cin >> merchandising;
+
+                            boleterias.push_back(new BoletoMedia(id,dia,mes,anio,merchandising));
+                        }else if(opcVendedor == 3 ){
+
+                            int idBoleto = 0, valor = 0;
+                            string dia = "", mes, anio, merchandising;
+                            bool backStage = true;
+                            cout<< "ingrese el id del boleto"<<endl;
+                            cin >> idBoleto;
+                            cout << "Ingrese el dia de la fecha de caducidad del boleto: "<<endl;
+                            cin>>dia;
+                            cout<< "Ingrese el mes de la fecha de caducidad del boleto: "<<endl;
+                            cin>>mes;
+                            cout<< "Ingrese el año de la fecha de caducidad del boleto: "<<endl;
+                            cin>>anio;
+                            cout << "Ingresa el valor del boleto: "<<endl;
+                            cin >> valor;
+                            cout << "El merchandising para boleteria VIP es una camiseta"<<endl;
+                            cout << "Deseas entrar en el BackStage: "<<endl;
+                            cout << "  0) no,    1)si"<<endl;
+                            cin >> backStage;
+
+                            boleterias.push_back(new BoletoVip(id,dia,mes,anio,"no", true));
+                        }
+                    }
+
                 }
             }
+            else if(opc == 7){
+                string nombre = "", correo ="";
+                int id = 0, edad = 0;
+                cout << "--------AGREGAR ESPECTADORES--------" << endl<<endl;
+                cout << "Crearemos ahora a los espectadores que asistiran al concierto"<<endl;
+                cout << "Ingrese el ID del espectador: "<<endl;
+                cin >> id;
+                cout << "Ingrese el nombre del espectador: "<<endl;
+                cin >> nombre;
+                cout << "Ingresa la edad del espectador: "<<endl;
+                cin >> edad;
+                cout << "Ingrese el correo del espectador: "<<endl;
+                cin >> correo;
+                cout << ""
+                especta.push_back(new Espectador(nombre,id, edad, correo,))
+
+
+
+            }
+            else if(opc == 8){
+                string nombre = "";
+                int id = 0, edad = 0, opcSeguridad = 0;
+
+                cout << "--------AGREGAR SEGURIDAD AL EVENTO--------" << endl<<endl;
+                cout << "Ahora seleccionaremos a los que se encargaran de la seguridad del evento"<< endl;
+                cout << "Seleccione una de las siguientes opciones: "<<endl;
+                cout << "1. Seguridad\n2. Fuerza policial"<<endl<<endl;
+                cin >> opcSeguridad;
+
+                if (opcSeguridad == 1){
+                    int nSeguridad;
+                    cout << "Cuantos hombres de seguridad quiere agregar? " << endl;
+                    cin >> nSeguridad;
+                    for(int i = 1; i<=nSeguridad, i++)
+                    {
+                        cout << "--------SEGURIDAD--------" << endl<<endl;
+                        cout << "Seguridad (" << i << ")" << endl;
+                        cout << "Ingresa el nombre: "<<endl;
+                        cin >> nombre;
+                        cout >>
+                    }
+                }
+                else if(opcSeguridad == 2){
+                    cout << "";
+                }
+            }
+            else if(opc == 9){
+                
+            }
+
     }
 
 
-
+    return 0;
 }
